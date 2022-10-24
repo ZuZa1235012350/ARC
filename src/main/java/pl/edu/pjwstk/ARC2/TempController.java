@@ -14,7 +14,7 @@ public class TempController {
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
     // Create a Key factory to construct keys associated with this project.
-    private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("user");
+    private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("book");
 
     @GetMapping("/")
     public String helloPage() {
