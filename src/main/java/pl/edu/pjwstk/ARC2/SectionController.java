@@ -15,8 +15,8 @@ public class SectionController {
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("section");
 
-    @PostMapping("/setSectionName/{name}")
-//    @GetMapping("/setSectionName/{name}")
+//    @PostMapping("/setSectionName/{name}")
+    @GetMapping("/setSectionName/{name}")
     public Key setSectionData(@PathVariable(value = "name")  String name) {
         Key key = datastore.allocateId(keyFactory.newKey());
         Entity section = Entity.newBuilder(key)
