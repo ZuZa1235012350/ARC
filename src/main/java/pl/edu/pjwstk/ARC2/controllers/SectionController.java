@@ -1,12 +1,16 @@
-package pl.edu.pjwstk.ARC2;
+package pl.edu.pjwstk.ARC2.controllers;
 
 
 import com.google.cloud.datastore.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.edu.pjwstk.ARC2.request.SectionRequest;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RestController
 @AllArgsConstructor
@@ -26,5 +30,19 @@ public class SectionController {
                 .build();
         datastore.put(section);
         return key;
+    }
+
+    @GetMapping ("/listSection")
+    public List<SectionRequest> listBooks() {
+        List<SectionRequest> listOfEntities = new ArrayList<>();
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("book")
+                .build();
+        QueryResults<Entity> results = datastore.run(query);
+        while (results.hasNext()) {
+            Entity currentEntity = results.next();
+            listOfEntities.add(new SectionRequest(currentEntity.getString("name")));
+        }
+        return listOfEntities;
     }
 }

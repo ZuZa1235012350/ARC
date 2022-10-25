@@ -1,12 +1,13 @@
-package pl.edu.pjwstk.ARC2;
+package pl.edu.pjwstk.ARC2.controllers;
 
 import com.google.cloud.datastore.*;
+
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.pjwstk.ARC2.request.BookRequest;
+
 
 import java.util.ArrayList;
 import java.util.List;

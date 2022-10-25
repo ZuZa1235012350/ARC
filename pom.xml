@@ -36,7 +36,8 @@
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-datastore</artifactId>
 		</dependency>
-	</dependencies>
+
+    </dependencies>
 
 	<dependencyManagement>
 		<dependencies>
