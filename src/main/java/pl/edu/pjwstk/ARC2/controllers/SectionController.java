@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import pl.edu.pjwstk.ARC2.request.SectionRequest;
+import pl.edu.pjwstk.ARC2.entities.Section;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +33,15 @@ public class SectionController {
     }
 
     @GetMapping ("/listSection")
-    public List<SectionRequest> listBooks() {
-        List<SectionRequest> listOfEntities = new ArrayList<>();
+    public List<Section> listBooks() {
+        List<Section> listOfEntities = new ArrayList<>();
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind("book")
                 .build();
         QueryResults<Entity> results = datastore.run(query);
         while (results.hasNext()) {
             Entity currentEntity = results.next();
-            listOfEntities.add(new SectionRequest(currentEntity.getString("name")));
+            listOfEntities.add(new Section(currentEntity.getString("name")));
         }
         return listOfEntities;
     }

@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import pl.edu.pjwstk.ARC2.request.BookRequest;
+import pl.edu.pjwstk.ARC2.entities.Book;
 
 
 import java.util.ArrayList;
@@ -37,21 +37,33 @@ public class BookController {
                 .build();
         datastore.put(book);
         return key;
+
     }
 
     @GetMapping ("/listBook")
-    public List<BookRequest> listBooks() {
-        List<BookRequest> listOfEntities = new ArrayList<>();
+    public String listBooks() {
+        List<Book> listOfEntities = new ArrayList<>();
         Query<Entity> query = Query.newEntityQueryBuilder()
                 .setKind("book")
                 .build();
         QueryResults<Entity> results = datastore.run(query);
         while (results.hasNext()) {
             Entity currentEntity = results.next();
-            listOfEntities.add(new BookRequest(currentEntity.getString("title"),currentEntity.getString("author"),Integer.parseInt(currentEntity.getString("counter"))));
+            listOfEntities.add(new Book(currentEntity.getString("title"),currentEntity.getString("author"),Integer.parseInt(currentEntity.getString("counter"))));
         }
-        return listOfEntities;
+        return listOfEntities.toString();
+//        Query<Entity> query = Query.newEntityQueryBuilder()
+//                .setKind("book")
+//                .build();
+//        QueryResults<Entity> results = datastore.run(query);
+//        String str = "";
+//        while (results.hasNext()) {
+//            Entity currentEntity = results.next();
+//            str += currentEntity.getString("title") + ", ";
+//        }
+//        return str;
     }
+
 
 
 }
