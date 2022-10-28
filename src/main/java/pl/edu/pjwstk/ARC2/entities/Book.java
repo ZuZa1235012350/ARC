@@ -26,5 +26,4 @@ public class Book {
                 ", genre=" + this.genre +
                 '}';
     }
-
 }

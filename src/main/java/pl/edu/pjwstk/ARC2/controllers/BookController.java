@@ -21,7 +21,7 @@ public class BookController {
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("book");
 
 //    @PostMapping("/setBookData/{title}/{author}/{counter}")
-    @GetMapping("/setBookData/{title}/{author}/{counter}")
+    @GetMapping("/setBookData/{title}/{author}/{counter}/{genre}")
     public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") int counter, @PathVariable(value = "genre") String genre) {
         Key key = datastore.allocateId(keyFactory.newKey());
         Entity book = Entity.newBuilder(key)
@@ -34,7 +34,6 @@ public class BookController {
         return key;
 
     }
-
     @GetMapping ("/listBook")
     public String listBooks() {
         List<Book> listOfEntities = new ArrayList<>();
@@ -58,7 +57,4 @@ public class BookController {
 //        }
 //        return str;
     }
-
-
-
 }
