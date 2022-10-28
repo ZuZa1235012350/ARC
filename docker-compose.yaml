@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  datastore:
+    image: knarz/datastore-emulator
+    ports:
+      - 8081:8432
+    environment:
+      CONSISTENCY: 1 # If you omit this, the emulator will emulate eventual consistency.

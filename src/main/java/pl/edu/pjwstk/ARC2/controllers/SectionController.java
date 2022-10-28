@@ -36,7 +36,7 @@ public class SectionController {
     public List<Section> listBooks() {
         List<Section> listOfEntities = new ArrayList<>();
         Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("book")
+                .setKind("section")
                 .build();
         QueryResults<Entity> results = datastore.run(query);
         while (results.hasNext()) {
