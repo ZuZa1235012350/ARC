@@ -34,6 +34,13 @@ public class BookController {
         return key;
 
     }
+    @GetMapping("/allbook")
+    public  String allbok(){
+        //List<Book> allList = new ArrayList<>();
+        Query<Entity>  query = Query.newEntityQueryBuilder().setKind("book").setFilter(StructuredQuery.CompositeFilter.and(StructuredQuery.PropertyFilter.eq("genre", "horror"))).setOrderBy(StructuredQuery.OrderBy.desc("name")).build();
+        QueryResults<Entity> tasks = datastore.run(query);
+        return tasks.toString();
+    }
     @GetMapping ("/listBook")
     public String listBooks() {
         List<Book> listOfEntities = new ArrayList<>();
