@@ -22,20 +22,20 @@ public class BookController {
         return service.setBookData(title,author,counter,sectionName);
     }
 
-    @GetMapping ("/listBook")
+    @GetMapping ("/listBooks")
     public List<Book> listBooks() {
         return service.getBooks();
     }
 
-    @GetMapping("/getSectionName/{title}")
-    public String getBookSectionName(@PathVariable("title") String title){
-        return service.getBookSection(title);
-    }
-
-    @GetMapping("/getBookByTitle/{title}")
-    public Book getBookByTitle(@PathVariable("title") String title){
-        return service.getBookByTitle(title);
-    }
+//    @GetMapping("/getSectionName/{title}")
+//    public String getBookSectionName(@PathVariable("title") String title){
+//        return service.getBookSection(title);
+//    }
+//
+//    @GetMapping("/getBookByTitle/{title}")
+//    public Book getBookByTitle(@PathVariable("title") String title){
+//        return service.getBookByTitle(title);
+//    }
 
 
 
