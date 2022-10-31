@@ -8,13 +8,16 @@ import lombok.Setter;
 public class Book {
     private String title;
     private String author;
-    private Integer counter;
+    private Long counter;
+    private String book_section;
 
-    public Book(String title, String author, Integer counter) {
+    public Book(String title, String author, Long counter, String book_section) {
         this.title = title;
         this.author = author;
         this.counter = counter;
+        this.book_section = book_section;
     }
+
     @Override
     public String toString() {
         return "Book{" +
