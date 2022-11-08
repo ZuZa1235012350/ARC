@@ -58,7 +58,7 @@ public class BookService implements BookRepository {
         QueryResults<Entity> results = datastore.run(query);
         while (results.hasNext()){
             Entity currentEntity = results.next();
-            if (currentEntity.getString("username").equals(title)){
+            if (currentEntity.getString("title").equals(title)){
                 return new Book(
                         currentEntity.getString("title"),
                         currentEntity.getString("author"),

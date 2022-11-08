@@ -32,10 +32,10 @@ public class BookController {
 //        return service.getBookSection(title);
 //    }
 //
-//    @GetMapping("/getBookByTitle/{title}")
-//    public Book getBookByTitle(@PathVariable("title") String title){
-//        return service.getBookByTitle(title);
-//    }
+    @GetMapping("/getBookByTitle/{title}")
+    public Book getBookByTitle(@PathVariable("title") String title){
+        return service.getBookByTitle(title);
+    }
 
 
 
