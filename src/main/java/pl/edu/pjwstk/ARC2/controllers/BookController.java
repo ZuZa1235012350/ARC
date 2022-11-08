@@ -31,10 +31,14 @@ public class BookController {
 //    public String getBookSectionName(@PathVariable("title") String title){
 //        return service.getBookSection(title);
 //    }
-//
     @GetMapping("/getBookByTitle/{title}")
     public Book getBookByTitle(@PathVariable("title") String title){
         return service.getBookByTitle(title);
+    }
+
+    @GetMapping("/getBooksBySection/{sectionName}")
+    public List<Book> getBooksBySection(@PathVariable("sectionName") String sectionName){
+        return service.getBooksWithTheSameSection(sectionName);
     }
 
 

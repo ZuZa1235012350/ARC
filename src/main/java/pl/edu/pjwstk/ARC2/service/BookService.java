@@ -35,20 +35,20 @@ public class BookService implements BookRepository {
         return key;
     }
 
-    @Override
-    public String getBookSection(String title) {
-        Query<Entity> query = Query.newEntityQueryBuilder()
-                .setKind("books")
-                .build();
-        QueryResults<Entity> results = datastore.run(query);
-        while (results.hasNext()){
-            Entity currentEntity = results.next();
-            if (currentEntity.getString("username").equals(title)){
-                return currentEntity.getString("sectionName");
-            }
-        }
-        return null;
-    }
+//    @Override
+//    public String getBookSection(String title) {
+//        Query<Entity> query = Query.newEntityQueryBuilder()
+//                .setKind("books")
+//                .build();
+//        QueryResults<Entity> results = datastore.run(query);
+//        while (results.hasNext()){
+//            Entity currentEntity = results.next();
+//            if (currentEntity.getString("username").equals(title)){
+//                return currentEntity.getString("sectionName");
+//            }
+//        }
+//        return null;
+//    }
 
     @Override
     public Book getBookByTitle(String title) {
@@ -68,6 +68,27 @@ public class BookService implements BookRepository {
             }
         }
         return null;
+    }
+
+    //TODO Get books that have same section
+    @Override
+    public List<Book> getBooksWithTheSameSection(String sectionName) {
+        Query<Entity> query = Query.newEntityQueryBuilder()
+                .setKind("books")
+                .build();
+        QueryResults<Entity> results = datastore.run(query);
+        List<Book> listOfEntities = new ArrayList<>();
+        while (results.hasNext()){
+            Entity currentEntity = results.next();
+            if (currentEntity.getString("sectionName").equals(sectionName)){
+                listOfEntities.add(new Book(
+                        currentEntity.getString("title"),
+                        currentEntity.getString("author"),
+                        currentEntity.getLong("counter"),
+                        currentEntity.getString("sectionName")));
+            }
+        }
+        return listOfEntities;
     }
 
     @Override
