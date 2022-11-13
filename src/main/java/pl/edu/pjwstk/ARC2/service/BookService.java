@@ -112,7 +112,7 @@ public class BookService implements BookRepository {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            datastore.update(book);
+            tx.put(book);
             tx.commit();
             return "Book was rented";
         } catch (ConcurrentModificationException e) {
