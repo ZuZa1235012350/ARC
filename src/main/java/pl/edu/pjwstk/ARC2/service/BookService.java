@@ -142,6 +142,7 @@ public class BookService implements BookRepository {
                 tx.rollback();
             }
         }
+        return "";
     }
 //    public final void increment() {
 //        int shardNum = generator.nextInt(NUM_SHARDS);
