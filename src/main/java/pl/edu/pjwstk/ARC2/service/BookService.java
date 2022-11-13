@@ -42,20 +42,6 @@ public class BookService implements BookRepository {
         return key;
     }
 
-//    @Override
-//    public String getBookSection(String title) {
-//        Query<Entity> query = Query.newEntityQueryBuilder()
-//                .setKind("books")
-//                .build();
-//        QueryResults<Entity> results = datastore.run(query);
-//        while (results.hasNext()){
-//            Entity currentEntity = results.next();
-//            if (currentEntity.getString("username").equals(title)){
-//                return currentEntity.getString("sectionName");
-//            }
-//        }
-//        return null;
-//    }
 
     @Override
     public Book getBookByTitle(String title) {
@@ -129,7 +115,7 @@ public class BookService implements BookRepository {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            datastore.put(book);
+            datastore.update(book);
             tx.commit();
         } catch (ConcurrentModificationException e) {
             LOG.log(Level.WARNING,
