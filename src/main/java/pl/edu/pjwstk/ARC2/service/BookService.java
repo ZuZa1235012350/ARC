@@ -101,22 +101,23 @@ public class BookService implements BookRepository {
     @Override
     public String rentBook(String title) {
         Transaction tx = datastore.newTransaction();
-        Entity book = null;
+        Entity bookKey = null;
         try {
             try {
-                book = tx.get(getBook(title).getKey());
+                var book = getBook(title);
+                bookKey = tx.get(getBook(title).getKey());
                 if (book.getLong("counter") != 0) {
-                    Entity.newBuilder(book)
+                    Entity.newBuilder(bookKey)
                             .set("counter", book.getLong("counter")-1L)
                             .build();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            tx.put(book);
+            tx.put(bookKey);
             tx.commit();
-            return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
-                    Objects.requireNonNull(book).getLong("counter")-1L);
+            return String.format("counter is %s now is %s", Objects.requireNonNull(bookKey).getLong("counter"),
+                    Objects.requireNonNull(bookKey).getLong("counter")-1L);
         } catch (ConcurrentModificationException e) {
             LOG.log(Level.WARNING,
                     "You may need more. Consider adding more.");
