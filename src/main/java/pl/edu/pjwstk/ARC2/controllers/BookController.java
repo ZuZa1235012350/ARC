@@ -21,6 +21,7 @@ public class BookController {
     public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
         return service.setBookData(title,author,counter,sectionName);
     }
+    //TODO NAPRAWA COUNTERA -- JAK WYPOŻYCZAĆ KSIAZKI?
 
     @GetMapping ("/listBooks")
     public List<Book> listBooks() {
@@ -39,6 +40,13 @@ public class BookController {
     @GetMapping("/getBooksBySection/{sectionName}")
     public List<Book> getBooksBySection(@PathVariable("sectionName") String sectionName){
         return service.getBooksWithTheSameSection(sectionName);
+    }
+
+    @GetMapping("/rentBook/{title}")
+    public String rentBook(@PathVariable("title") String title){
+        service.rentBook(title);
+        return String.format("Book %s was rented", title);
+
     }
 
 
