@@ -119,7 +119,7 @@ public class BookService implements BookRepository {
             try {
 //                book = getBook(title);
                 book = tx.get(getBook(title).getKey());
-                var count = book.getLong("count");
+                var count = book.getLong("counter");
                 if (count != 0) {
                     Entity.newBuilder(book)
                             .set("counter", count - 1)
