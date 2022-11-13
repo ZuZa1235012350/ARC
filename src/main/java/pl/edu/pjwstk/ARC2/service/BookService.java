@@ -103,63 +103,32 @@ public class BookService implements BookRepository {
         Entity book = null;
         try {
             try {
-//                book = getBook(title);
                 book = tx.get(getBook(title).getKey());
-                var count = book.getLong("counter") - 1L;
-                if (count != 0) {
+                if (book.getLong("counter") != 0) {
                     Entity.newBuilder(book)
-                            .set("counter", count)
+                            .set("counter", book.getLong("counter")-1)
                             .build();
-                    return "Book was rented";
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             datastore.update(book);
             tx.commit();
+            return "Book was rented";
         } catch (ConcurrentModificationException e) {
             LOG.log(Level.WARNING,
                     "You may need more. Consider adding more.");
             LOG.log(Level.WARNING, e.toString(), e);
+            return "Don't work";
         } catch (Exception e) {
             LOG.log(Level.WARNING, e.toString(), e);
+            return "Don't work";
         } finally {
             if (tx.isActive()) {
                 tx.rollback();
             }
         }
-        return "";
     }
-//    public final void increment() {
-//        int shardNum = generator.nextInt(NUM_SHARDS);
-//        Key shardKey = KeyFactory.createKey("SimpleCounterShard",
-//                Integer.toString(shardNum));
-//
-//        Transaction tx = datastore.beginTransaction();
-//        Entity shard;
-//        try {
-//            try {
-//                shard = datastore.get(tx, shardKey);
-//                long count = (Long) shard.getProperty("count");
-//                shard.setUnindexedProperty("count", count + 1L);
-//            } catch (EntityNotFoundException e) {
-//                shard = new Entity(shardKey);
-//                shard.setUnindexedProperty("count", 1L);
-//            }
-//            DS.put(tx, shard);
-//            tx.commit();
-//        } catch (ConcurrentModificationException e) {
-//            LOG.log(Level.WARNING,
-//                    "You may need more shards. Consider adding more shards.");
-//            LOG.log(Level.WARNING, e.toString(), e);
-//        } catch (Exception e) {
-//            LOG.log(Level.WARNING, e.toString(), e);
-//        } finally {
-//            if (tx.isActive()) {
-//                tx.rollback();
-//            }
-//        }
-//    }
 
     @Override
     public List<Book> getBooks() {
