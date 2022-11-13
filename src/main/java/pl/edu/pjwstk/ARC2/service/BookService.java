@@ -112,7 +112,7 @@ public class BookService implements BookRepository {
     }
 
     @Override
-    public void rentBook(String title) {
+    public String rentBook(String title) {
         Transaction tx = datastore.newTransaction();
         Entity book = null;
         try {
@@ -122,8 +122,9 @@ public class BookService implements BookRepository {
                 var count = book.getLong("count");
                 if (count != 0) {
                     Entity.newBuilder(book)
-                            .set("count", count + 1L)
+                            .set("count", count - 1)
                             .build();
+                    return "Book was rented";
                 }
             } catch (Exception e) {
                 e.printStackTrace();

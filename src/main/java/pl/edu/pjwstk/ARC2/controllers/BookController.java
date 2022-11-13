@@ -44,9 +44,7 @@ public class BookController {
 
     @GetMapping("/rentBook/{title}")
     public String rentBook(@PathVariable("title") String title){
-        service.rentBook(title);
-        return String.format("Book %s was rented", title);
-
+       return service.rentBook(title);
     }
 
 

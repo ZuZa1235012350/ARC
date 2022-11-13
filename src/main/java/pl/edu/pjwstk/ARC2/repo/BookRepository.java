@@ -12,5 +12,5 @@ public interface BookRepository {
     Book getBookByTitle(String title);
     List<Book> getBooks();
     List<Book> getBooksWithTheSameSection(String sectionName);
-    void rentBook(String title);
+    String rentBook(String title);
 }
