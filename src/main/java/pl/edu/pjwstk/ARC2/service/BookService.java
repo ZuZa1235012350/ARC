@@ -104,11 +104,10 @@ public class BookService implements BookRepository {
             try {
                 book = tx.get(getBook(title).getKey());
                 if (book.getLong("counter") != 0) {
-//                    Entity.newBuilder(book)
-//                            .set("counter", book.getLong("counter")-1L)
-//                            .build();
-                    setBookData(book.getString("title"),book.getString("author"),book.getLong("counter")-1L,book.getString("sectionName"));
-//                    return "Byłem tu";
+                    Entity.newBuilder(book)
+                            .set("counter", book.getLong("counter")-1L)
+                            .build();
+                    datastore.update(book);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
