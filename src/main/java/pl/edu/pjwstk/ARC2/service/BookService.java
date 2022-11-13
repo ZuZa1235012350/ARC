@@ -122,7 +122,7 @@ public class BookService implements BookRepository {
                 var count = book.getLong("count");
                 if (count != 0) {
                     Entity.newBuilder(book)
-                            .set("count", count - 1)
+                            .set("counter", count - 1)
                             .build();
                     return "Book was rented";
                 }
