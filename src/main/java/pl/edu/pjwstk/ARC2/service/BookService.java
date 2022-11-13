@@ -6,10 +6,8 @@ import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.repo.BookRepository;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
@@ -104,12 +102,12 @@ public class BookService implements BookRepository {
         Entity book = null;
         try {
             try {
-//                var book = getBook(title);
                 book = tx.get(getBook(title).getKey());
                 if (book.getLong("counter") != 0) {
                     Entity.newBuilder(book)
                             .set("counter", book.getLong("counter")-1L)
                             .build();
+                    return "Byłem tu";
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -118,14 +116,8 @@ public class BookService implements BookRepository {
             tx.commit();
             return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                     Objects.requireNonNull(book).getLong("counter")-1L);
-        } catch (ConcurrentModificationException e) {
-            LOG.log(Level.WARNING,
-                    "You may need more. Consider adding more.");
-            LOG.log(Level.WARNING, e.toString(), e);
-            return "Don't work";
         } catch (Exception e) {
-            LOG.log(Level.WARNING, e.toString(), e);
-            return "Don't work";
+            return "Doesn't work";
         } finally {
             if (tx.isActive()) {
                 tx.rollback();
