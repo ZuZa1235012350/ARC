@@ -8,6 +8,7 @@ import pl.edu.pjwstk.ARC2.repo.BookRepository;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -106,7 +107,7 @@ public class BookService implements BookRepository {
                 book = tx.get(getBook(title).getKey());
                 if (book.getLong("counter") != 0) {
                     Entity.newBuilder(book)
-                            .set("counter", book.getLong("counter")-1)
+                            .set("counter", book.getLong("counter")-1L)
                             .build();
                 }
             } catch (Exception e) {
@@ -114,7 +115,8 @@ public class BookService implements BookRepository {
             }
             tx.put(book);
             tx.commit();
-            return "Book was rented";
+            return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
+                    Objects.requireNonNull(book).getLong("counter")-1L);
         } catch (ConcurrentModificationException e) {
             LOG.log(Level.WARNING,
                     "You may need more. Consider adding more.");
