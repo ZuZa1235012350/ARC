@@ -8,16 +8,12 @@ import pl.edu.pjwstk.ARC2.repo.BookRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 @Service
 public class BookService implements BookRepository {
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("books");
-
-    private static final Logger LOG = Logger.getLogger(BookService.class
-            .getName());
 
 
     @Override
@@ -26,13 +22,13 @@ public class BookService implements BookRepository {
         Entity book = Entity.newBuilder(key)
                 .set(
                         "title",
-                        StringValue.newBuilder(title).setExcludeFromIndexes(true).build())
+                        StringValue.newBuilder(title).build())
                 .set(
                         "author",
-                        StringValue.newBuilder(author).setExcludeFromIndexes(true).build())
+                        StringValue.newBuilder(author).build())
                 .set(
                         "sectionName",
-                        StringValue.newBuilder(sectionName).setExcludeFromIndexes(true).build())
+                        StringValue.newBuilder(sectionName).build())
                 .set(
                         "counter",
                         counter)
