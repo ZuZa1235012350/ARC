@@ -107,7 +107,8 @@ public class BookService implements BookRepository {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            tx.update(book);
+            tx.put(book);
+//            tx.update(book);
             tx.commit();
             return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                         Objects.requireNonNull(book).getLong("counter")-1L);
