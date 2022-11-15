@@ -95,11 +95,12 @@ public class BookService implements BookRepository {
     @Override
     public String rentBook(String title) {
         Transaction tx = datastore.newTransaction();
+
         Entity book = null;
         try {
             try {
                 book = tx.get(getBook(title).getKey());
-                if (book.getLong("counter") != 0) {
+                if (book.getLong("counter") > 0) {
                     Entity.newBuilder(book)
                             .set("counter", book.getLong("counter")-1L)
                             .build();
@@ -107,9 +108,10 @@ public class BookService implements BookRepository {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            tx.put(book);
+//            tx.put(book);
 //            tx.update(book);
-            tx.commit();
+//            tx.commit();
+            datastore.update(book);
             return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                         Objects.requireNonNull(book).getLong("counter")-1L);
 
