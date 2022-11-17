@@ -5,19 +5,15 @@ import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.repo.BookRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 @Service
 public class BookService implements BookRepository {
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("books");
-    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+//    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private final Timer t = new Timer();
 
 
 
@@ -118,7 +114,13 @@ public class BookService implements BookRepository {
             tx.commit();
 //            executorService.schedule(this::reminder, 5, TimeUnit.DAYS);
             //For demonstrations
-            executorService.schedule(this::reminder, 5, TimeUnit.SECONDS);
+            t.schedule(new TimerTask() {
+                           @Override
+                           public void run() {
+                              reminder();
+                           }
+                       },
+                    5000 );
             return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                         Objects.requireNonNull(book).getLong("counter")-1L);
 
@@ -149,7 +151,8 @@ public class BookService implements BookRepository {
         return listOfEntities;
     }
 
-    public String reminder(){
-        return "You have to return the book";
+    public String reminder() {
+     return  "You have to return the book";
     }
+
 }
