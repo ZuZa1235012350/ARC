@@ -21,17 +21,11 @@ public class BookController {
     public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
         return service.setBookData(title,author,counter,sectionName);
     }
-    //TODO NAPRAWA COUNTERA -- JAK WYPOŻYCZAĆ KSIAZKI?
-
     @GetMapping ("/listBooks")
     public List<Book> listBooks() {
         return service.getBooks();
     }
 
-//    @GetMapping("/getSectionName/{title}")
-//    public String getBookSectionName(@PathVariable("title") String title){
-//        return service.getBookSection(title);
-//    }
     @GetMapping("/getBookByTitle/{title}")
     public Book getBookByTitle(@PathVariable("title") String title){
         return service.getBookByTitle(title);
@@ -42,6 +36,7 @@ public class BookController {
         return service.getBooksWithTheSameSection(sectionName);
     }
 
+    //ZAD 4. Przypomnienie o terminie zwrotu książki
     @GetMapping("/rentBook/{title}")
     public String rentBook(@PathVariable("title") String title){
        return service.rentBook(title);

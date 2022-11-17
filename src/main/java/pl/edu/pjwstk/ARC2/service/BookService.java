@@ -8,12 +8,18 @@ import pl.edu.pjwstk.ARC2.repo.BookRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BookService implements BookRepository {
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("books");
+    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+
 
 
     @Override
@@ -108,9 +114,11 @@ public class BookService implements BookRepository {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-//            tx.put(book);
             tx.update(book);
             tx.commit();
+//            executorService.schedule(this::reminder, 5, TimeUnit.DAYS);
+            //For demonstrations
+            executorService.schedule(this::reminder, 5, TimeUnit.SECONDS);
             return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                         Objects.requireNonNull(book).getLong("counter")-1L);
 
@@ -139,5 +147,9 @@ public class BookService implements BookRepository {
                     currentEntity.getString("sectionName")));
         }
         return listOfEntities;
+    }
+
+    public String reminder(){
+        return "You have to return the book";
     }
 }
