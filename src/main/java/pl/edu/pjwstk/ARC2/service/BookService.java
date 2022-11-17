@@ -1,19 +1,25 @@
 package pl.edu.pjwstk.ARC2.service;
 
 import com.google.cloud.datastore.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.repo.BookRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 public class BookService implements BookRepository {
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("books");
-//    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private final Timer t = new Timer();
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
 
 
@@ -103,8 +109,8 @@ public class BookService implements BookRepository {
             try {
                 book = tx.get(getBook(title).getKey());
                 if (book.getLong("counter") > 0) {
-                     book = Entity.newBuilder(book)
-                            .set("counter", book.getLong("counter")-1L)
+                    book = Entity.newBuilder(book)
+                            .set("counter", book.getLong("counter") - 1L)
                             .build();
                 }
             } catch (Exception e) {
@@ -114,15 +120,11 @@ public class BookService implements BookRepository {
             tx.commit();
 //            executorService.schedule(this::reminder, 5, TimeUnit.DAYS);
             //For demonstrations
-            t.schedule(new TimerTask() {
-                           @Override
-                           public void run() {
-                              reminder();
-                           }
-                       },
-                    5000 );
+            executorService.schedule(this::reminder, 2, TimeUnit.SECONDS);
+
             return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
-                        Objects.requireNonNull(book).getLong("counter")-1L);
+                    Objects.requireNonNull(book).getLong("counter") - 1L);
+
 
         } catch (Exception e) {
             return "Doesn't work";
@@ -151,8 +153,8 @@ public class BookService implements BookRepository {
         return listOfEntities;
     }
 
-    public String reminder() {
-     return  "You have to return the book";
+    public void reminder() {
+        log.info("You should return the book by now");
     }
 
 }
