@@ -120,7 +120,7 @@ public class BookService implements BookRepository {
             tx.commit();
 //            executorService.schedule(this::reminder, 5, TimeUnit.DAYS);
             //For demonstrations
-            executorService.schedule(this::reminder, 2, TimeUnit.SECONDS);
+            executorService.schedule(reminder, 2, TimeUnit.SECONDS);
 
             return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                     Objects.requireNonNull(book).getLong("counter") - 1L);
@@ -153,8 +153,16 @@ public class BookService implements BookRepository {
         return listOfEntities;
     }
 
-    public void reminder() {
-        log.info("You should return the book by now");
-    }
+//    public void reminder() {
+//        log.info("You should return the book by now");
+//    }
+
+    Runnable reminder = new Runnable() {
+        public void run() {
+            // Do something
+            System.out.println("You should return the book by now");
+        }
+    };
+
 
 }
