@@ -6,7 +6,12 @@ import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.repo.BookRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -14,8 +19,9 @@ public class BookService implements BookRepository {
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("books");
-   // private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-   Timer timer = new Timer();
+    private final KeyFactory keyFactoryNotification = datastore.newKeyFactory().setKind("notification");
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
 
 
 
@@ -99,7 +105,7 @@ public class BookService implements BookRepository {
     @Override
     public String rentBook(String title) {
         Transaction tx = datastore.newTransaction();
-        final String[] returnedMessage = new String[1];
+        String returnedMessage;
         Entity book = null;
         try {
             try {
@@ -116,27 +122,20 @@ public class BookService implements BookRepository {
             tx.commit();
 //            executorService.schedule(this::reminder, 5, TimeUnit.DAYS);
             //For demonstrations
-            //executorService.schedule(reminder, 2, TimeUnit.SECONDS);
-
-
-            returnedMessage[0] = String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
+            executorService.schedule(this::reminder,
+                    2,
+                    TimeUnit.SECONDS);
+            returnedMessage = String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                     Objects.requireNonNull(book).getLong("counter") - 1L);
-            timer.schedule(new TimerTask(){
-                @Override
-                public void run() {
-                   returnedMessage[0] = "You should return the book by now";
-                }
-            }, 5000);
-
 
         } catch (Exception e) {
-            returnedMessage[0] = "Doesn't work";
+            returnedMessage = "Doesn't work";
         } finally {
             if (tx.isActive()) {
                 tx.rollback();
             }
         }
-        return returnedMessage[0];
+        return returnedMessage;
     }
 
     @Override
@@ -157,9 +156,15 @@ public class BookService implements BookRepository {
         return listOfEntities;
     }
 
-//    public void reminder() {
-//        log.info("You should return the book by now");
-//    }
+    public void reminder() {
+        Key key = datastore.allocateId(keyFactoryNotification.newKey());
+        Entity notification = Entity.newBuilder(key)
+                .set(
+                        "message",
+                        StringValue.newBuilder("You should return the book by now.").build())
+                .build();
+        datastore.put(notification);
+    }
 
 
 
