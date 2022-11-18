@@ -6,12 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.repo.BookRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -19,7 +14,8 @@ public class BookService implements BookRepository {
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("books");
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+   // private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+   Timer timer = new Timer();
 
 
 
@@ -103,7 +99,7 @@ public class BookService implements BookRepository {
     @Override
     public String rentBook(String title) {
         Transaction tx = datastore.newTransaction();
-
+        final String[] returnedMessage = new String[1];
         Entity book = null;
         try {
             try {
@@ -120,19 +116,27 @@ public class BookService implements BookRepository {
             tx.commit();
 //            executorService.schedule(this::reminder, 5, TimeUnit.DAYS);
             //For demonstrations
-            executorService.schedule(reminder, 2, TimeUnit.SECONDS);
+            //executorService.schedule(reminder, 2, TimeUnit.SECONDS);
 
-            return String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
+
+            returnedMessage[0] = String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                     Objects.requireNonNull(book).getLong("counter") - 1L);
+            timer.schedule(new TimerTask(){
+                @Override
+                public void run() {
+                   returnedMessage[0] = "You should return the book by now";
+                }
+            }, 5000);
 
 
         } catch (Exception e) {
-            return "Doesn't work";
+            returnedMessage[0] = "Doesn't work";
         } finally {
             if (tx.isActive()) {
                 tx.rollback();
             }
         }
+        return returnedMessage[0];
     }
 
     @Override
@@ -157,12 +161,6 @@ public class BookService implements BookRepository {
 //        log.info("You should return the book by now");
 //    }
 
-    Runnable reminder = new Runnable() {
-        public void run() {
-            // Do something
-            System.out.println("You should return the book by now");
-        }
-    };
 
 
 }
