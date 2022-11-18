@@ -36,7 +36,6 @@ public class BookController {
         return service.getBooksWithTheSameSection(sectionName);
     }
 
-    //ZAD 4. Przypomnienie o terminie zwrotu książki
     @GetMapping("/rentBook/{title}")
     public String rentBook(@PathVariable("title") String title){
        return service.rentBook(title);
