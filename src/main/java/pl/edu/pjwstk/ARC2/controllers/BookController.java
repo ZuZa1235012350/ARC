@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.pjwstk.ARC2.entities.Book;
+import pl.edu.pjwstk.ARC2.entities.CreateTask;
 import pl.edu.pjwstk.ARC2.service.BookService;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class BookController {
 
     private final BookService service;
+    private final CreateTask task;
 //    @PostMapping("/setBookData/{title}/{author}/{counter}")
     @GetMapping("/setBookData/{title}/{author}/{counter}/{sectionName}")
     public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
@@ -32,13 +34,15 @@ public class BookController {
     }
 
     @GetMapping("/getBooksBySection/{sectionName}")
-    public List<Book> getBooksBySection(@PathVariable("sectionName") String sectionName){
+    public List<Book> getBooksBySection(@PathVariable("sectionName") String sectionName) throws Exception {
+        task.addTask();
         return service.getBooksWithTheSameSection(sectionName);
     }
 
     @GetMapping("/rentBook/{title}")
     public String rentBook(@PathVariable("title") String title){
        return service.rentBook(title);
+
     }
 
     @GetMapping("/remind")
