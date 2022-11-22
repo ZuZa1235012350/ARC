@@ -9,9 +9,6 @@ import pl.edu.pjwstk.ARC2.repo.BookRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -20,7 +17,7 @@ public class BookService implements BookRepository {
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("books");
     private final KeyFactory keyFactoryNotification = datastore.newKeyFactory().setKind("notification");
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+//    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
 
 
@@ -122,9 +119,9 @@ public class BookService implements BookRepository {
             tx.commit();
 //            executorService.schedule(this::reminder, 5, TimeUnit.DAYS);
             //For demonstrations
-            executorService.schedule(this::reminder,
-                    2,
-                    TimeUnit.SECONDS);
+//            executorService.schedule(this::reminder,
+//                    2,
+//                    TimeUnit.SECONDS);
             returnedMessage = String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                     Objects.requireNonNull(book).getLong("counter") - 1L);
 
@@ -156,7 +153,8 @@ public class BookService implements BookRepository {
         return listOfEntities;
     }
 
-    public void reminder() {
+    //Cloud Task
+    public String sendReminder() {
         Key key = datastore.allocateId(keyFactoryNotification.newKey());
         Entity notification = Entity.newBuilder(key)
                 .set(
@@ -164,6 +162,7 @@ public class BookService implements BookRepository {
                         StringValue.newBuilder("You should return the book by now.").build())
                 .build();
         datastore.put(notification);
+        return "task scheduled";
     }
 
 

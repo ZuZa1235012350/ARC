@@ -41,6 +41,11 @@ public class BookController {
        return service.rentBook(title);
     }
 
+    @GetMapping("/remind")
+    public String remind(){
+        return service.sendReminder();
+    }
+
 
 
 }
