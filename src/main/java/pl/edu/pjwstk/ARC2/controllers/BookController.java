@@ -52,8 +52,8 @@ public class BookController {
     }
 
     @GetMapping("/setDataFromCsv")
-    public void setDataFromCsvGCS() throws IOException {
-        streamObjectDownload.download("arc2-366516","arc2-366516.appspot.com","books.csv","temp.csv");
+    public String setDataFromCsvGCS() throws IOException {
+        return streamObjectDownload.download();
     }
 
 
