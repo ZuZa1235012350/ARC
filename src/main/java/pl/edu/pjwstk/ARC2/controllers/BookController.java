@@ -2,6 +2,7 @@ package pl.edu.pjwstk.ARC2.controllers;
 
 import com.google.cloud.datastore.Key;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,8 +50,9 @@ public class BookController {
     }
 
     @GetMapping("/setDataFromCsv")
-    public void setDataFromCsvGCS() throws Exception {
-        loadCsvFromGcsTruncate.runLoadCsvFromGcs();
+    public ResponseEntity<List<String>> setDataFromCsvGCS() throws Exception {
+        var temp =loadCsvFromGcsTruncate.runLoadCsvFromGcs();
+        return ResponseEntity.ok(temp);
     }
 
 
