@@ -6,8 +6,6 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 
-import java.nio.file.Paths;
-
 public class StreamObjectDownload {
 
 //    public String download() throws IOException {
@@ -23,7 +21,7 @@ public class StreamObjectDownload {
 //        }
 //
 //    }
-public String download(String bucketName, String objectName, String destFilePath) {
+public byte[] download(String bucketName, String objectName) {
     // The ID of your GCP project
     // String projectId = "your-project-id";
 
@@ -39,15 +37,15 @@ public String download(String bucketName, String objectName, String destFilePath
     Storage storage = StorageOptions.getDefaultInstance().getService();
 
     Blob blob = storage.get(BlobId.of(bucketName, objectName));
-    blob.downloadTo(Paths.get(destFilePath));
+    var content = blob.getContent();
+
+    return content;
 
     return
             "Downloaded object "
                     + objectName
                     + " from bucket name "
-                    + bucketName
-                    + " to "
-                    + destFilePath;
+                    + bucketName;
 }
 
 }
