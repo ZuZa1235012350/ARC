@@ -53,7 +53,7 @@ public class BookController {
 
     @GetMapping("/setDataFromCsv")
     public String setDataFromCsvGCS() throws IOException {
-        return streamObjectDownload.download();
+        return streamObjectDownload.download("arc2-366516.appspot.com","books.csv","src/main/resources/temp.csv");
     }
 
 
