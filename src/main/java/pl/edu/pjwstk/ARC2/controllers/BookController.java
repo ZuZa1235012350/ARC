@@ -2,15 +2,16 @@ package pl.edu.pjwstk.ARC2.controllers;
 
 import com.google.cloud.datastore.Key;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.service.BookService;
-import pl.edu.pjwstk.ARC2.zad5.LoadCsvFromGcsTruncate;
+import pl.edu.pjwstk.ARC2.zad5.StreamObjectDownload;
 
+import java.io.IOException;
 import java.util.List;
+
 
 
 @RestController
@@ -18,7 +19,8 @@ import java.util.List;
 public class BookController {
 
     private final BookService service;
-    private final LoadCsvFromGcsTruncate loadCsvFromGcsTruncate;
+
+    private final StreamObjectDownload streamObjectDownload;
 //    @PostMapping("/setBookData/{title}/{author}/{counter}")
     @GetMapping("/setBookData/{title}/{author}/{counter}/{sectionName}")
     public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
@@ -50,9 +52,8 @@ public class BookController {
     }
 
     @GetMapping("/setDataFromCsv")
-    public ResponseEntity<List<String>> setDataFromCsvGCS() throws Exception {
-        var temp =loadCsvFromGcsTruncate.runLoadCsvFromGcs();
-        return ResponseEntity.ok(temp);
+    public void setDataFromCsvGCS() throws IOException {
+        streamObjectDownload.download("arc2-366516","arc2-366516.appspot.com","books.csv","temp.csv");
     }
 
 

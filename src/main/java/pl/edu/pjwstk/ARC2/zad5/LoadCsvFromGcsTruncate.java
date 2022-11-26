@@ -1,27 +1,22 @@
 package pl.edu.pjwstk.ARC2.zad5;
 
-
 import pl.edu.pjwstk.ARC2.service.BookService;
-
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 
 
 public class LoadCsvFromGcsTruncate {
     private static BookService bookService;
 
-    public List<String> runLoadCsvFromGcs() throws Exception {
-
-
-        String sourceUri = "https://storage.cloud.google.com/arc2-366516.appspot.com/books.csv";
-//        String sourceUri = "gs://arc2-366516.appspot.com/books.csv";
-        Path path = Paths.get(URI.create(sourceUri));
-        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
-        return lines;
+    public void runLoadCsvFromGcs() throws Exception {
+//        try{
+//
+////        String sourceUri = "https://storage.cloud.google.com/arc2-366516.appspot.com/books.csv";
+//////        String sourceUri = "gs://arc2-366516.appspot.com/books.csv";
+////        Path path = Paths.get(URI.create(sourceUri));
+////        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+////        return lines;
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//    }
 //        loadCsvFromGcs(lines);
     }
 //    public void loadCsvFromGcs(List<String> lines) {
