@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.service.BookService;
+import pl.edu.pjwstk.ARC2.zad5.LoadCsvFromGcsTruncate;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class BookController {
 
     private final BookService service;
+    private final LoadCsvFromGcsTruncate loadCsvFromGcsTruncate;
 //    @PostMapping("/setBookData/{title}/{author}/{counter}")
     @GetMapping("/setBookData/{title}/{author}/{counter}/{sectionName}")
     public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
@@ -44,6 +46,11 @@ public class BookController {
     @GetMapping("/remind")
     public String remind(){
         return service.sendReminder();
+    }
+
+    @GetMapping("/setDataFromCsv")
+    public void setDataFromCsvGCS() throws Exception {
+        loadCsvFromGcsTruncate.runLoadCsvFromGcs();
     }
 
 

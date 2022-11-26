@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.ARC2.entities;
+package pl.edu.pjwstk.ARC2.zad4;
 
 import com.google.cloud.tasks.v2.AppEngineHttpRequest;
 import com.google.cloud.tasks.v2.CloudTasksClient;
