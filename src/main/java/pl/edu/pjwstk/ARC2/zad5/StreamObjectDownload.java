@@ -41,11 +41,6 @@ public byte[] download(String bucketName, String objectName) {
 
     return content;
 
-    return
-            "Downloaded object "
-                    + objectName
-                    + " from bucket name "
-                    + bucketName;
 }
 
 }
