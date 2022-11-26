@@ -51,10 +51,10 @@ public class BookController {
         return service.sendReminder();
     }
 
-    @GetMapping("/setDataFromCsv")
-    public String setDataFromCsvGCS() throws IOException {
-        return streamObjectDownload.download();
-    }
+//    @GetMapping("/setDataFromCsv")
+//    public String setDataFromCsvGCS() throws IOException {
+//        return streamObjectDownload.download();
+//    }
 
 
 
