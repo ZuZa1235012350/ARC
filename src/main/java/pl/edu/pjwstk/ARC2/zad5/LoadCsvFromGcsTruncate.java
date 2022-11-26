@@ -17,7 +17,8 @@ public class LoadCsvFromGcsTruncate {
     public List<String> runLoadCsvFromGcs() throws Exception {
 
 
-        String sourceUri = "gs://arc2-366516.appspot.com/books.csv";
+        String sourceUri = "https://storage.cloud.google.com/arc2-366516.appspot.com/books.csv";
+//        String sourceUri = "gs://arc2-366516.appspot.com/books.csv";
         Path path = Paths.get(URI.create(sourceUri));
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         return lines;
