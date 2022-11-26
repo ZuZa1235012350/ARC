@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.service.BookService;
+import pl.edu.pjwstk.ARC2.zad5.StreamObjectDownload;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -18,7 +20,7 @@ public class BookController {
 
     private final BookService service;
 
-   // private final StreamObjectDownload streamObjectDownload;
+    private final StreamObjectDownload streamObjectDownload;
 //    @PostMapping("/setBookData/{title}/{author}/{counter}")
     @GetMapping("/setBookData/{title}/{author}/{counter}/{sectionName}")
     public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
@@ -49,10 +51,10 @@ public class BookController {
         return service.sendReminder();
     }
 
-//    @GetMapping("/setDataFromCsv")
-//    public String setDataFromCsvGCS() throws IOException {
-//        return streamObjectDownload.download();
-//    }
+    @GetMapping("/setDataFromCsv")
+    public String setDataFromCsvGCS() throws IOException {
+        return streamObjectDownload.download();
+    }
 
 
 
