@@ -49,7 +49,7 @@ public class BookController {
     }
 
     @GetMapping("/setDataFromCsv")
-    public byte[] setDataFromCsvGCS(){
+    public List<String> setDataFromCsvGCS(){
         return service.download();
 
     }

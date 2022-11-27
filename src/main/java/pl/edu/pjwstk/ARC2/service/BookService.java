@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.repo.BookRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -164,16 +162,16 @@ public class BookService implements BookRepository {
         return "task scheduled";
     }
 
-    public byte[] download() {
+    public List<String> download() {
         Storage storage = StorageOptions.getDefaultInstance().getService();
-
-        //    Blob blob = storage.get(BlobId.of(bucketName, objectName));
         Blob blob = storage.get(
                 BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/books.csv")
         );
-        var content = blob.getContent();
-
-        return content;
+        //var content = blob.getContent();
+        String temp = Base64.getEncoder().encodeToString(blob.getContent());
+        List<String> items = Arrays.asList(temp.split("\\s*,\\s*"));
+        return items;
+        //return content;
 
     }
 
