@@ -166,7 +166,7 @@ public class BookService implements BookRepository {
         return "task scheduled";
     }
 
-    public List<String> download() {
+    public void downloadDataFromGCS() {
         Storage storage = StorageOptions.getDefaultInstance().getService();
         Blob blob = storage.get(
                 BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/books.csv")
@@ -178,9 +178,6 @@ public class BookService implements BookRepository {
            var temp = bookData.get(i).split(",");
            this.setBookData(temp[0],temp[1], Long.valueOf(temp[2]),temp[3]);
        }
-        return bookData;
-
-
     }
 
 }

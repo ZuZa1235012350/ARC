@@ -49,9 +49,8 @@ public class BookController {
     }
 
     @GetMapping("/setDataFromCsv")
-    public List<String>  setDataFromCsvGCS(){
-        return service.download();
-
+    public void  setDataFromCsvGCS(){
+       service.downloadDataFromGCS();
     }
 
 
