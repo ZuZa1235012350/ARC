@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.service.BookService;
+import pl.edu.pjwstk.ARC2.zad5.StreamObjectDownload;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class BookController {
 
     private final BookService service;
 
-    //private final StreamObjectDownload streamObjectDownload;
+    private final StreamObjectDownload streamObjectDownload;
 //    @PostMapping("/setBookData/{title}/{author}/{counter}")
     @GetMapping("/setBookData/{title}/{author}/{counter}/{sectionName}")
     public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
@@ -49,15 +50,11 @@ public class BookController {
         return service.sendReminder();
     }
 
-//    @GetMapping("/setDataFromCsv")
-//    public ResponseEntity<byte[]> setDataFromCsvGCS() throws IOException {
-////        return streamObjectDownload.download("arc2-366516.appspot.com","books.csv");
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("Content-type", MediaType.ALL_VALUE);
-//        byte[] bytes = streamObjectDownload.download("arc2-366516.appspot.com","books.csv");
-//        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(bytes);
-//
-//    }
+    @GetMapping("/setDataFromCsv")
+    public byte[] setDataFromCsvGCS(){
+        return streamObjectDownload.download();
+
+    }
 
 
 
