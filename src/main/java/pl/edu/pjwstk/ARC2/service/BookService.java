@@ -173,10 +173,8 @@ public class BookService implements BookRepository {
         );
         //var content = blob.getContent();
         var decodedString =  new String(blob.getContent(), StandardCharsets.UTF_8);
-        List<String> bookData = Arrays.asList(decodedString.split("\\s*,\\s*"));
-        for(int i=3;i<bookData.size();i+=3){
-            this.setBookData(bookData.get(i),bookData.get(i+=1), Long.valueOf(bookData.get(i+=2)),bookData.get(i+=3));
-        }
+        List<String> bookData = Arrays.asList(decodedString.split(","));
+
         return bookData;
 
 
