@@ -172,8 +172,9 @@ public class BookService implements BookRepository {
                 BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/books.csv")
         );
         //var content = blob.getContent();
-        var decodedString =  new String(blob.getContent(), StandardCharsets.UTF_8);
-        List<String> bookData = Arrays.asList(decodedString.split(","));
+        var decodedString =  new String(blob.getContent(), StandardCharsets.UTF_8).replaceAll("\\r\\n", "");
+       List<String> bookData = Arrays.asList(decodedString.split(","));
+
 
         return bookData;
 
