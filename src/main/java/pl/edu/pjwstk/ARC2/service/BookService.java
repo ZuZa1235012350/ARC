@@ -1,6 +1,10 @@
 package pl.edu.pjwstk.ARC2.service;
 
 import com.google.cloud.datastore.*;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.ARC2.entities.Book;
@@ -17,11 +21,6 @@ public class BookService implements BookRepository {
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("books");
     private final KeyFactory keyFactoryNotification = datastore.newKeyFactory().setKind("notification");
-//    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-
-
-
-
 
     @Override
     public Key setBookData(String title, String author, Long counter, String sectionName) {
@@ -165,6 +164,17 @@ public class BookService implements BookRepository {
         return "task scheduled";
     }
 
+    public byte[] download() {
+        Storage storage = StorageOptions.getDefaultInstance().getService();
 
+        //    Blob blob = storage.get(BlobId.of(bucketName, objectName));
+        Blob blob = storage.get(
+                BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/books.csv")
+        );
+        var content = blob.getContent();
+
+        return content;
+
+    }
 
 }
