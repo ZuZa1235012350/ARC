@@ -36,7 +36,10 @@ public byte[] download(String bucketName, String objectName) {
 
     Storage storage = StorageOptions.getDefaultInstance().getService();
 
-    Blob blob = storage.get(BlobId.of(bucketName, objectName));
+//    Blob blob = storage.get(BlobId.of(bucketName, objectName));
+    Blob blob = storage.get(
+            BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/books.csv")
+    );
     var content = blob.getContent();
 
     return content;
