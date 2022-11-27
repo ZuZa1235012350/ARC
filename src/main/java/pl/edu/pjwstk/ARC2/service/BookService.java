@@ -12,6 +12,7 @@ import pl.edu.pjwstk.ARC2.repo.BookRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -165,13 +166,16 @@ public class BookService implements BookRepository {
         return "task scheduled";
     }
 
-    public String download() {
+    public List<String> download() {
         Storage storage = StorageOptions.getDefaultInstance().getService();
         Blob blob = storage.get(
                 BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/books.csv")
         );
         //var content = blob.getContent();
-         return new String(blob.getContent(), StandardCharsets.UTF_8);
+        var decodedString =  new String(blob.getContent(), StandardCharsets.UTF_8);
+        List<String> bookData = Arrays.asList(decodedString.split("\\s*,\\s*"));
+        return bookData;
+
 
         //return content;
 
