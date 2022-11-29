@@ -51,7 +51,7 @@ public class CreateTask {
         try (CloudTasksClient client = CloudTasksClient.create()) {
             // Variables provided by system variables.
             String projectId = System.getenv("GOOGLE_CLOUD_PROJECT");
-            String queueName = System.getenv("default-2");
+            String queueName = System.getenv("default");
             String location = System.getenv("europe-west1");
             // Optional variables.
             String payload = "hello";
