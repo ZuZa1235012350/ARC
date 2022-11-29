@@ -49,7 +49,7 @@ public class BookController {
     }
 
     @GetMapping("/setDataFromCsv")
-    public void  setDataFromCsvGCS(){
+    public void  setDataFromCsvGCS() throws Exception {
        service.downloadDataFromGCS();
     }
 

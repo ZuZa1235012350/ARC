@@ -5,10 +5,12 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.repo.BookRepository;
+import pl.edu.pjwstk.ARC2.zad4.CreateTask;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -18,7 +20,9 @@ import java.util.Objects;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class BookService implements BookRepository {
+    private final CreateTask createTask;
     private final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
     private final KeyFactory keyFactory = datastore.newKeyFactory().setKind("books");
@@ -166,7 +170,7 @@ public class BookService implements BookRepository {
         return "task scheduled";
     }
 
-    public void downloadDataFromGCS() {
+    public void downloadDataFromGCS() throws Exception {
         Storage storage = StorageOptions.getDefaultInstance().getService();
         Blob blob = storage.get(
                 BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/books.csv")
@@ -178,6 +182,7 @@ public class BookService implements BookRepository {
            var temp = bookData.get(i).split(",");
            this.setBookData(temp[0],temp[1], Long.valueOf(temp[2]),temp[3]);
        }
+        createTask.addTaskForReadingFromGCS();
     }
 
 }
