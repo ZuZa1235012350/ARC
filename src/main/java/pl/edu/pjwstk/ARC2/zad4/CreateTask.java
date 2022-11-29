@@ -3,12 +3,13 @@ package pl.edu.pjwstk.ARC2.zad4;
 import com.google.cloud.tasks.v2.*;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
-import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
 import java.time.Clock;
 import java.time.Instant;
 
+@Service
 public class CreateTask {
     public void addTask() throws Exception {
         // Instantiates a client.
@@ -44,7 +45,7 @@ public class CreateTask {
             System.out.println("Task created: " + task.getName());
         }
     }
-    @Bean
+
     public void addTaskForReadingFromGCS() throws Exception {
         // Instantiates a client.
         try (CloudTasksClient client = CloudTasksClient.create()) {
