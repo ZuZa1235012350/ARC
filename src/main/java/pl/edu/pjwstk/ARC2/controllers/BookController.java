@@ -56,7 +56,7 @@ public class BookController {
         createTask.addTaskForReadingFromGCS();
     }
     @GetMapping("/setDataFromCsv")
-    public void  setDataFromCsvGCS() throws Exception {
+    public void  setDataFromCsvGCS() {
         service.downloadDataFromGCS();
 //        createTask.addTaskForReadingFromGCS();
     }

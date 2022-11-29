@@ -7,10 +7,13 @@ import com.google.cloud.tasks.v2.QueueName;
 import com.google.cloud.tasks.v2.Task;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
+import org.springframework.stereotype.Service;
+
 import java.nio.charset.Charset;
 import java.time.Clock;
 import java.time.Instant;
 
+@Service
 public class CreateTask {
     public void addTask() throws Exception {
         // Instantiates a client.
