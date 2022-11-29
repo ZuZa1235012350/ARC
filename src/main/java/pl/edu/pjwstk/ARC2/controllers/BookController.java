@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.service.BookService;
+import pl.edu.pjwstk.ARC2.zad4.CreateTask;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class BookController {
 
     private final BookService service;
+    private final CreateTask createTask;
 
 //    @PostMapping("/setBookData/{title}/{author}/{counter}")
     @GetMapping("/setBookData/{title}/{author}/{counter}/{sectionName}")
@@ -51,6 +53,7 @@ public class BookController {
     @GetMapping("/setDataFromCsv")
     public void  setDataFromCsvGCS() throws Exception {
        service.downloadDataFromGCS();
+//        createTask.addTaskForReadingFromGCS();
     }
 
 

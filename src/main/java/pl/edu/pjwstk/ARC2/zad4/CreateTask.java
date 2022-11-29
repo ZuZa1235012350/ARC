@@ -70,6 +70,7 @@ public class CreateTask {
                                             .setHttpMethod(HttpMethod.GET)
                                             .build());
 
+
             // Add the scheduled time to the request.
             taskBuilder.setScheduleTime(
                     Timestamp.newBuilder()
