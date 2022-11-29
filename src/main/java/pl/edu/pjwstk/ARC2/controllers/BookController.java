@@ -50,9 +50,14 @@ public class BookController {
         return service.sendReminder();
     }
 
+    @GetMapping("/triggerImport")
+    public void  triggerImport() throws Exception {
+//       service.downloadDataFromGCS();
+        createTask.addTaskForReadingFromGCS();
+    }
     @GetMapping("/setDataFromCsv")
     public void  setDataFromCsvGCS() throws Exception {
-       service.downloadDataFromGCS();
+        service.downloadDataFromGCS();
 //        createTask.addTaskForReadingFromGCS();
     }
 
