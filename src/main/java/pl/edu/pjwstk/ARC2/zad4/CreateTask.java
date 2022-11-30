@@ -65,7 +65,7 @@ public class CreateTask {
                     Task.newBuilder()
                             .setAppEngineHttpRequest(
                                     AppEngineHttpRequest.newBuilder()
-                                            .setBody(ByteString.copyFrom(payload, Charset.defaultCharset()))
+//                                            .setBody(ByteString.copyFrom(payload, Charset.defaultCharset()))
                                             .setRelativeUri("/setDataFromCsv")
                                             .setHttpMethod(HttpMethod.GET)
                                             .build());
