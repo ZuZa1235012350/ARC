@@ -1,4 +1,4 @@
-package pl.edu.pjwstk.ARC2.zad4;
+package pl.edu.pjwstk.ARC2.cloudtask;
 
 import com.google.cloud.tasks.v2.*;
 import com.google.protobuf.ByteString;

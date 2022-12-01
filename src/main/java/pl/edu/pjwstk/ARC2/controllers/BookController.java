@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.service.BookService;
-import pl.edu.pjwstk.ARC2.zad4.CreateTask;
+import pl.edu.pjwstk.ARC2.cloudtask.CreateTask;
 
 import java.util.List;
 
@@ -19,8 +19,6 @@ public class BookController {
     private final CreateTask createTask;
 
     @PostMapping("/setBookData")
-//    @GetMapping("/setBookData/{title}/{author}/{counter}/{sectionName}")
-//    public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
     public Key setBookData(@RequestBody Book book) {
         return service.setBookData(book.getTitle(),book.getAuthor(),book.getCounter(),book.getBook_section());
     }
@@ -51,13 +49,11 @@ public class BookController {
 
     @GetMapping("/triggerImport")
     public void  triggerImport() throws Exception {
-//       service.downloadDataFromGCS();
         createTask.addTaskForReadingFromGCS();
     }
     @PostMapping("/setDataFromCsv")
     public void  setDataFromCsvGCS() {
         service.downloadDataFromGCS();
-//        createTask.addTaskForReadingFromGCS();
     }
 
 
