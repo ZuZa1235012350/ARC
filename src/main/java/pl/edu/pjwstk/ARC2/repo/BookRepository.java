@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface BookRepository {
-    Key setBookData(String title,String author,Long counter, String sectionName);
+    Key setBookData(String title, String author, Long counter, String sectionName);
     Book getBookByTitle(String title);
     List<Book> getBooks();
     List<Book> getBooksWithTheSameSection(String sectionName);

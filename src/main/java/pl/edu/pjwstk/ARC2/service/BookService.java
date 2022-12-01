@@ -27,9 +27,9 @@ public class BookService implements BookRepository {
     private final KeyFactory keyFactoryNotification = datastore.newKeyFactory().setKind("notification");
 
     @Override
-    public Key setBookData(String title, String author, Long counter, String sectionName) {
+   public Key setBookData(String title, String author, Long counter, String sectionName) {
         Key key = datastore.allocateId(keyFactory.newKey());
-        Entity book = Entity.newBuilder(key)
+        Entity bookEntity = Entity.newBuilder(key)
                 .set(
                         "title",
                         StringValue.newBuilder(title).build())
@@ -43,7 +43,7 @@ public class BookService implements BookRepository {
                         "counter",
                         counter)
                 .build();
-        datastore.put(book);
+        datastore.put(bookEntity);
         return key;
     }
 

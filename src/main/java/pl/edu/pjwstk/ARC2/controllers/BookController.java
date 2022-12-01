@@ -2,10 +2,7 @@ package pl.edu.pjwstk.ARC2.controllers;
 
 import com.google.cloud.datastore.Key;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.service.BookService;
 import pl.edu.pjwstk.ARC2.zad4.CreateTask;
@@ -21,10 +18,11 @@ public class BookController {
     private final BookService service;
     private final CreateTask createTask;
 
-//    @PostMapping("/setBookData/{title}/{author}/{counter}")
-    @GetMapping("/setBookData/{title}/{author}/{counter}/{sectionName}")
-    public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
-        return service.setBookData(title,author,counter,sectionName);
+    @PostMapping("/setBookData")
+//    @GetMapping("/setBookData/{title}/{author}/{counter}/{sectionName}")
+//    public Key setBookData(@PathVariable(value = "title")  String title, @PathVariable(value = "author") String author, @PathVariable(value = "counter") Long counter,@PathVariable(value = "sectionName") String sectionName) {
+    public Key setBookData(@RequestBody Book book) {
+        return service.setBookData(book.getTitle(),book.getAuthor(),book.getCounter(),book.getBook_section());
     }
     @GetMapping ("/listBooks")
     public List<Book> listBooks() {
