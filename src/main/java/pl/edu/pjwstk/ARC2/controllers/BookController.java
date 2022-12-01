@@ -4,6 +4,7 @@ import com.google.cloud.datastore.Key;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.service.BookService;
@@ -55,7 +56,7 @@ public class BookController {
 //       service.downloadDataFromGCS();
         createTask.addTaskForReadingFromGCS();
     }
-    @GetMapping("/setDataFromCsv")
+    @PostMapping("/setDataFromCsv")
     public void  setDataFromCsvGCS() {
         service.downloadDataFromGCS();
 //        createTask.addTaskForReadingFromGCS();
