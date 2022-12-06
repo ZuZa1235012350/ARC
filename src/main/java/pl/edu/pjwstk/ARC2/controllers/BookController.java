@@ -2,11 +2,15 @@ package pl.edu.pjwstk.ARC2.controllers;
 
 import com.google.cloud.datastore.Key;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import pl.edu.pjwstk.ARC2.cloudtask.CreateTask;
 import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.service.BookService;
-import pl.edu.pjwstk.ARC2.cloudtask.CreateTask;
+import pl.edu.pjwstk.ARC2.zad6.GCSUpload;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -17,6 +21,7 @@ public class BookController {
 
     private final BookService service;
     private final CreateTask createTask;
+    private final GCSUpload GCSUpload;
 
     @PostMapping("/setBookData")
     public Key setBookData(@RequestBody Book book) {
@@ -54,6 +59,11 @@ public class BookController {
     @PostMapping("/setDataFromCsv")
     public void  setDataFromCsvGCS() {
         service.downloadDataFromGCS();
+    }
+
+    @PostMapping(value = "/uploadFileToGCS/{fileName}",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void uploadFileToGcs(@PathVariable("fileName")String fileName,@RequestParam("file") MultipartFile file) throws IOException {
+        GCSUpload.uploadFile(fileName,file.getBytes(),file.getContentType());
     }
 
 
