@@ -171,7 +171,7 @@ public class BookService implements BookRepository {
     public void downloadDataFromGCS(){
         Storage storage = StorageOptions.getDefaultInstance().getService();
         Blob blob = storage.get(
-                BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/books.csv")
+                BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/booksFiles/books.csv")
 //                BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/"+fileName)
         );
         //var content = blob.getContent();
