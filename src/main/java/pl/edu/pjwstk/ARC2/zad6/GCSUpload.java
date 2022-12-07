@@ -1,10 +1,12 @@
 package pl.edu.pjwstk.ARC2.zad6;
 
 import com.google.cloud.storage.*;
+import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+@Service
 public class GCSUpload {
 
     public void uploadFile(String projectId, String bucketName, String objectName, byte[] fileContents, String contentType) {
