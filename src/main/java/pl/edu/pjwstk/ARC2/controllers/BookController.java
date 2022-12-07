@@ -38,7 +38,7 @@ public class BookController {
     }
 
     @GetMapping("/getBooksBySection/{sectionName}")
-    public List<Book> getBooksBySection(@PathVariable("sectionName") String sectionName) throws Exception {
+    public List<Book> getBooksBySection(@PathVariable("sectionName") String sectionName) {
         return service.getBooksWithTheSameSection(sectionName);
     }
 
@@ -61,9 +61,9 @@ public class BookController {
         service.downloadDataFromGCS();
     }
 
-    @PostMapping(value = "/uploadFileToGCS/{fileName}",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void uploadFileToGcs(@PathVariable("fileName")String fileName,@RequestParam("file") MultipartFile file) throws IOException {
-        GCSUpload.uploadFile(fileName,file.getBytes(),file.getContentType());
+    @PostMapping(value = "/uploadFileToGCS/{fileName}",consumes = MediaType.ALL_VALUE)
+    public void uploadFileToGcs(@PathVariable("fileName")  String fileName, @RequestParam("file") MultipartFile file) throws IOException {
+        GCSUpload.uploadFile("arc2-366516","arc2-366516.appspot.com","booksFiles/"+fileName,file.getBytes(),file.getContentType());
     }
 
 
