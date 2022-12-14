@@ -1,6 +1,5 @@
 package pl.edu.pjwstk.ARC2.service;
 
-import autovalue.shaded.com.google.common.collect.ImmutableList;
 import com.google.cloud.bigquery.*;
 import com.google.cloud.datastore.*;
 import com.google.cloud.storage.Blob;
@@ -211,9 +210,10 @@ public class BookService implements BookRepository {
             InsertAllResponse response =
                     bigquery.insertAll(
                             InsertAllRequest.newBuilder(TableId.of("sample-dataset", "book"))
-                                    .setRows(
-                                            ImmutableList.of(
-                                                    InsertAllRequest.RowToInsert.of(newBook)))
+//                                    .setRows(
+//                                            ImmutableList.of(
+//                                                    InsertAllRequest.RowToInsert.of(newBook)))
+                                    .addRow(newBook)
                                     .build());
 
             if (response.hasErrors()) {
