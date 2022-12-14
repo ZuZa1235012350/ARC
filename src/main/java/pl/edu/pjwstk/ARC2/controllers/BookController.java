@@ -1,5 +1,6 @@
 package pl.edu.pjwstk.ARC2.controllers;
 
+import com.google.cloud.bigquery.TableResult;
 import com.google.cloud.datastore.Key;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -69,6 +70,11 @@ public class BookController {
     @PostMapping("/addBookToBigQueryTable")
     public void setBookDataToBQ(@RequestBody Book book)  {
         service.addBookToBigQueryTable(book.getTitle(),book.getAuthor(),book.getCounter(),book.getBook_section());
+    }
+
+    @GetMapping("/getBooksFromBigQueryTable")
+    public TableResult getDataFromBQ()  {
+        return service.queryTotalRows();
     }
 
 

@@ -177,30 +177,8 @@ public class BookService implements BookRepository {
 
     @Override
     public void addBookToBigQueryTable(String title, String author, Long counter, String sectionName) {
-//         try{   // Step 1: Initialize BigQuery service
-//            BigQuery bigquery = BigQueryOptions.newBuilder().setProjectId("arc2-366516")
-//                    .build().getService();
-//
-//            // Step 2: Prepare query job
-//            final String INSERT_BOOK =
-//                   String.format("INSERT INTO `arc2-366516.sample_dataset.book` (title,author,counter,book_section) VALUES (%s,%s,%o,%s)"
-//                           ,title,author,counter,sectionName);
-//
-//            QueryJobConfiguration queryConfig =
-//                    QueryJobConfiguration.newBuilder(INSERT_BOOK).build();
-//
-//
-//            // Execute the query.
-//            TableResult result = bigquery.query(queryConfig);
-//            System.out.println("Query ran successfully");
-//        } catch (BigQueryException | InterruptedException e) {
-//            System.out.println("Query did not run \n" + e.toString());
-//        }
         try {
-            // Initialize client that will be used to send requests. This client only needs to be created
-            // once, and can be reused for multiple requests.
             final BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
-            // Create rows to insert
             Map<String, Object> newBook = new HashMap<>();
             newBook.put("title", title);
             newBook.put("author",author);
@@ -210,14 +188,10 @@ public class BookService implements BookRepository {
             InsertAllResponse response =
                     bigquery.insertAll(
                             InsertAllRequest.newBuilder(TableId.of("sample_dataset", "book"))
-//                                    .setRows(
-//                                            ImmutableList.of(
-//                                                    InsertAllRequest.RowToInsert.of(newBook)))
                                     .addRow(newBook)
                                     .build());
 
             if (response.hasErrors()) {
-                // If any of the insertions failed, this lets you inspect the errors
                 for (Map.Entry<Long, List<BigQueryError>> entry : response.getInsertErrors().entrySet()) {
                     System.out.println("Response error: \n" + entry.getValue());
                 }
@@ -227,6 +201,23 @@ public class BookService implements BookRepository {
             System.out.println("Insert operation not performed \n" + e.toString());
         }
     }
+
+    @Override
+    public TableResult queryTotalRows() {
+        try {
+            String query = "SELECT * FROM `sample_dataset.book`";
+
+            BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+
+            TableResult results = bigquery.query(QueryJobConfiguration.of(query));
+
+            return results;
+        } catch (BigQueryException | InterruptedException e) {
+            System.out.println("Query not performed \n" + e.toString());
+            return null;
+        }
+    }
+
 
 }
 
