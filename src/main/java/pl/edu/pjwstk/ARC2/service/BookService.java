@@ -184,37 +184,44 @@ public class BookService implements BookRepository {
     }
 
     @Override
-    public void addBookToBigQueryTable(String title, String author, Long counter, String sectionName) throws Exception {
-        // Step 1: Initialize BigQuery service
-        BigQuery bigquery = BigQueryOptions.newBuilder().setProjectId("arc2-366516")
-                .build().getService();
+    public void addBookToBigQueryTable(String title, String author, Long counter, String sectionName) {
+         try{   // Step 1: Initialize BigQuery service
+            BigQuery bigquery = BigQueryOptions.newBuilder().setProjectId("arc2-366516")
+                    .build().getService();
 
-        // Step 2: Prepare query job
-        final String INSERT_BOOK =
-               String.format("INSERT INTO `arc2-366516.sample_dataset.book` (title,author,counter,book_section) VALUES (%s,%s,%o,%s)"
-                       ,title,author,counter,sectionName);
+            // Step 2: Prepare query job
+            final String INSERT_BOOK =
+                   String.format("INSERT INTO `arc2-366516.sample_dataset.book` (title,author,counter,book_section) VALUES (%s,%s,%o,%s)"
+                           ,title,author,counter,sectionName);
 
-        QueryJobConfiguration queryConfig =
-                QueryJobConfiguration.newBuilder(INSERT_BOOK).build();
+            QueryJobConfiguration queryConfig =
+                    QueryJobConfiguration.newBuilder(INSERT_BOOK).build();
 
+
+            // Execute the query.
+            TableResult result = bigquery.query(queryConfig);
+            System.out.println("Query ran successfully");
+        } catch (BigQueryException | InterruptedException e) {
+            System.out.println("Query did not run \n" + e.toString());
+        }
 
         // Step 3: Run the job on BigQuery
-        Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).build());
-        queryJob = queryJob.waitFor();
-
-        if (queryJob == null) {
-            throw new Exception("job no longer exists");
-        }
-        // once the job is done, check if any error occured
-        if (queryJob.getStatus().getError() != null) {
-            throw new Exception(queryJob.getStatus().getError().toString());
-        }
-
-        // Step 4: Display results
-        // Here, we will print the total number of rows that were inserted
-        JobStatistics.QueryStatistics stats = queryJob.getStatistics();
-        Long rowsInserted = stats.getDmlStats().getInsertedRowCount();
-        System.out.printf("%d rows inserted\n", rowsInserted);
+//        Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).build());
+//        queryJob = queryJob.waitFor();
+//
+//        if (queryJob == null) {
+//            throw new Exception("job no longer exists");
+//        }
+//        // once the job is done, check if any error occured
+//        if (queryJob.getStatus().getError() != null) {
+//            throw new Exception(queryJob.getStatus().getError().toString());
+//        }
+//
+//        // Step 4: Display results
+//        // Here, we will print the total number of rows that were inserted
+//        JobStatistics.QueryStatistics stats = queryJob.getStatistics();
+//        Long rowsInserted = stats.getDmlStats().getInsertedRowCount();
+//        System.out.printf("%d rows inserted\n", rowsInserted);
     }
 
 }

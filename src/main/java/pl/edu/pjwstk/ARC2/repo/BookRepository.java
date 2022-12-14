@@ -15,5 +15,5 @@ public interface BookRepository {
     String rentBook(String title);
     String sendReminder();
     void downloadDataFromGCS();
-    void addBookToBigQueryTable(String title, String author, Long counter, String sectionName) throws Exception;
+    void addBookToBigQueryTable(String title, String author, Long counter, String sectionName) ;
 }

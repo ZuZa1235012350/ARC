@@ -67,7 +67,7 @@ public class BookController {
     }
 
     @PostMapping("/addBookToBigQueryTable")
-    public void setBookDataToBQ(@RequestBody Book book) throws Exception {
+    public void setBookDataToBQ(@RequestBody Book book)  {
         service.addBookToBigQueryTable(book.getTitle(),book.getAuthor(),book.getCounter(),book.getBook_section());
     }
 
