@@ -205,7 +205,7 @@ public class BookService implements BookRepository {
             newBook.put("title", title);
             newBook.put("author",author);
             newBook.put("counter",counter);
-            newBook.put("section_name",sectionName);
+            newBook.put("book_section",sectionName);
 
             InsertAllResponse response =
                     bigquery.insertAll(
