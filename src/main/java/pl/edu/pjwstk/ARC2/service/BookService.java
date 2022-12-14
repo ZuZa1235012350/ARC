@@ -209,7 +209,7 @@ public class BookService implements BookRepository {
 
             InsertAllResponse response =
                     bigquery.insertAll(
-                            InsertAllRequest.newBuilder(TableId.of("sample-dataset", "book"))
+                            InsertAllRequest.newBuilder(TableId.of("sample_dataset", "book"))
 //                                    .setRows(
 //                                            ImmutableList.of(
 //                                                    InsertAllRequest.RowToInsert.of(newBook)))
