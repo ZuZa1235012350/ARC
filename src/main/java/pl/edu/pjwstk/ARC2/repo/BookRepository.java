@@ -13,4 +13,7 @@ public interface BookRepository {
     List<Book> getBooks();
     List<Book> getBooksWithTheSameSection(String sectionName);
     String rentBook(String title);
+    String sendReminder();
+    void downloadDataFromGCS();
+    void addBookToBigQueryTable(String title, String author, Long counter, String sectionName) throws Exception;
 }

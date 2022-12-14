@@ -1,5 +1,6 @@
 package pl.edu.pjwstk.ARC2.service;
 
+import com.google.cloud.bigquery.*;
 import com.google.cloud.datastore.*;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -157,6 +158,7 @@ public class BookService implements BookRepository {
     }
 
     //Cloud Task
+    @Override
     public String sendReminder() {
         Key key = datastore.allocateId(keyFactoryNotification.newKey());
         Entity notification = Entity.newBuilder(key)
@@ -167,20 +169,52 @@ public class BookService implements BookRepository {
         datastore.put(notification);
         return "task scheduled";
     }
-
+    @Override
     public void downloadDataFromGCS(){
         Storage storage = StorageOptions.getDefaultInstance().getService();
         Blob blob = storage.get(
                 BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/booksFiles/books.csv")
-//                BlobId.fromGsUtilUri("gs://arc2-366516.appspot.com/"+fileName)
         );
-        //var content = blob.getContent();
-        var decodedString =  new String(blob.getContent(), StandardCharsets.UTF_8);
+       var decodedString =  new String(blob.getContent(), StandardCharsets.UTF_8);
        List<String> bookData = Arrays.asList(decodedString.split("\\r\\n"));
        for(int i=1; i<bookData.size();i++){
            var temp = bookData.get(i).split(",");
            this.setBookData(temp[0],temp[1], Long.valueOf(temp[2]),temp[3]);
        }
+    }
+
+    @Override
+    public void addBookToBigQueryTable(String title, String author, Long counter, String sectionName) throws Exception {
+        // Step 1: Initialize BigQuery service
+        BigQuery bigquery = BigQueryOptions.newBuilder().setProjectId("arc2-366516")
+                .build().getService();
+
+        // Step 2: Prepare query job
+        final String INSERT_BOOK =
+               String.format("INSERT INTO `arc2-366516.sample_dataset.book` (title,author,counter,book_section) VALUES (%s,%s,%d,%s)"
+                       ,title,author,counter,sectionName);
+
+        QueryJobConfiguration queryConfig =
+                QueryJobConfiguration.newBuilder(INSERT_BOOK).build();
+
+
+        // Step 3: Run the job on BigQuery
+        Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).build());
+        queryJob = queryJob.waitFor();
+
+        if (queryJob == null) {
+            throw new Exception("job no longer exists");
+        }
+        // once the job is done, check if any error occured
+        if (queryJob.getStatus().getError() != null) {
+            throw new Exception(queryJob.getStatus().getError().toString());
+        }
+
+        // Step 4: Display results
+        // Here, we will print the total number of rows that were inserted
+        JobStatistics.QueryStatistics stats = queryJob.getStatistics();
+        Long rowsInserted = stats.getDmlStats().getInsertedRowCount();
+        System.out.printf("%d rows inserted\n", rowsInserted);
     }
 
 }

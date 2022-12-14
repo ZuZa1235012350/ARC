@@ -66,6 +66,11 @@ public class BookController {
         GCSUpload.uploadFile("arc2-366516","arc2-366516.appspot.com","booksFiles/"+fileName,file.getBytes(),file.getContentType());
     }
 
+    @PostMapping("/addBookToBigQueryTable")
+    public void setBookDataToBQ(@RequestBody Book book) throws Exception {
+        service.addBookToBigQueryTable(book.getTitle(),book.getAuthor(),book.getCounter(),book.getBook_section());
+    }
+
 
 
 }
