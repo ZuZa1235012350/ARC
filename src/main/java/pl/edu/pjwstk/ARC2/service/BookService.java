@@ -191,7 +191,7 @@ public class BookService implements BookRepository {
 
         // Step 2: Prepare query job
         final String INSERT_BOOK =
-               String.format("INSERT INTO `arc2-366516.sample_dataset.book` (title,author,counter,book_section) VALUES (%s,%s,%d,%s)"
+               String.format("INSERT INTO `arc2-366516.sample_dataset.book` (title,author,counter,book_section) VALUES (%s,%s,%o,%s)"
                        ,title,author,counter,sectionName);
 
         QueryJobConfiguration queryConfig =
