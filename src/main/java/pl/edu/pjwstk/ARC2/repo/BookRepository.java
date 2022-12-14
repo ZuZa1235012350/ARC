@@ -1,6 +1,5 @@
 package pl.edu.pjwstk.ARC2.repo;
 
-import com.google.cloud.bigquery.TableResult;
 import com.google.cloud.datastore.Key;
 import org.springframework.stereotype.Repository;
 import pl.edu.pjwstk.ARC2.entities.Book;
@@ -17,5 +16,5 @@ public interface BookRepository {
     String sendReminder();
     void downloadDataFromGCS();
     void addBookToBigQueryTable(String title, String author, Long counter, String sectionName);
-    TableResult queryTotalRows();
+    long queryTotalRows();
 }

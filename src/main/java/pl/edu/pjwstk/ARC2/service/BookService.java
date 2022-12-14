@@ -203,18 +203,18 @@ public class BookService implements BookRepository {
     }
 
     @Override
-    public TableResult queryTotalRows() {
+    public long queryTotalRows() {
         try {
-            String query = "SELECT * FROM `sample_dataset.book`";
+            String query = "SELECT TO_JSON_STRING(*) FROM `sample_dataset.book`";
 
             BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
 
             TableResult results = bigquery.query(QueryJobConfiguration.of(query));
 
-            return results;
+            return results.getTotalRows();
         } catch (BigQueryException | InterruptedException e) {
             System.out.println("Query not performed \n" + e.toString());
-            return null;
+           return 0;
         }
     }
 
