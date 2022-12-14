@@ -1,5 +1,6 @@
 package pl.edu.pjwstk.ARC2.service;
 
+import autovalue.shaded.com.google.common.collect.ImmutableList;
 import com.google.cloud.bigquery.*;
 import com.google.cloud.datastore.*;
 import com.google.cloud.storage.Blob;
@@ -13,10 +14,7 @@ import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.repo.BookRepository;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -121,11 +119,6 @@ public class BookService implements BookRepository {
             }
             tx.update(book);
             tx.commit();
-//            executorService.schedule(this::reminder, 5, TimeUnit.DAYS);
-            //For demonstrations
-//            executorService.schedule(this::reminder,
-//                    2,
-//                    TimeUnit.SECONDS);
             returnedMessage = String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                     Objects.requireNonNull(book).getLong("counter") - 1L);
 
@@ -185,43 +178,56 @@ public class BookService implements BookRepository {
 
     @Override
     public void addBookToBigQueryTable(String title, String author, Long counter, String sectionName) {
-         try{   // Step 1: Initialize BigQuery service
-            BigQuery bigquery = BigQueryOptions.newBuilder().setProjectId("arc2-366516")
-                    .build().getService();
+//         try{   // Step 1: Initialize BigQuery service
+//            BigQuery bigquery = BigQueryOptions.newBuilder().setProjectId("arc2-366516")
+//                    .build().getService();
+//
+//            // Step 2: Prepare query job
+//            final String INSERT_BOOK =
+//                   String.format("INSERT INTO `arc2-366516.sample_dataset.book` (title,author,counter,book_section) VALUES (%s,%s,%o,%s)"
+//                           ,title,author,counter,sectionName);
+//
+//            QueryJobConfiguration queryConfig =
+//                    QueryJobConfiguration.newBuilder(INSERT_BOOK).build();
+//
+//
+//            // Execute the query.
+//            TableResult result = bigquery.query(queryConfig);
+//            System.out.println("Query ran successfully");
+//        } catch (BigQueryException | InterruptedException e) {
+//            System.out.println("Query did not run \n" + e.toString());
+//        }
+        try {
+            // Initialize client that will be used to send requests. This client only needs to be created
+            // once, and can be reused for multiple requests.
+            final BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+            // Create rows to insert
+            Map<String, Object> newBook = new HashMap<>();
+            newBook.put("title", title);
+            newBook.put("author",author);
+            newBook.put("counter",counter);
+            newBook.put("section_name",sectionName);
 
-            // Step 2: Prepare query job
-            final String INSERT_BOOK =
-                   String.format("INSERT INTO `arc2-366516.sample_dataset.book` (title,author,counter,book_section) VALUES (%s,%s,%o,%s)"
-                           ,title,author,counter,sectionName);
+            InsertAllResponse response =
+                    bigquery.insertAll(
+                            InsertAllRequest.newBuilder(TableId.of("sample-dataset", "book"))
+                                    .setRows(
+                                            ImmutableList.of(
+                                                    InsertAllRequest.RowToInsert.of(newBook)))
+                                    .build());
 
-            QueryJobConfiguration queryConfig =
-                    QueryJobConfiguration.newBuilder(INSERT_BOOK).build();
-
-
-            // Execute the query.
-            TableResult result = bigquery.query(queryConfig);
-            System.out.println("Query ran successfully");
-        } catch (BigQueryException | InterruptedException e) {
-            System.out.println("Query did not run \n" + e.toString());
+            if (response.hasErrors()) {
+                // If any of the insertions failed, this lets you inspect the errors
+                for (Map.Entry<Long, List<BigQueryError>> entry : response.getInsertErrors().entrySet()) {
+                    System.out.println("Response error: \n" + entry.getValue());
+                }
+            }
+            System.out.println("Rows successfully inserted into table without row ids");
+        } catch (BigQueryException e) {
+            System.out.println("Insert operation not performed \n" + e.toString());
         }
-
-        // Step 3: Run the job on BigQuery
-//        Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).build());
-//        queryJob = queryJob.waitFor();
-//
-//        if (queryJob == null) {
-//            throw new Exception("job no longer exists");
-//        }
-//        // once the job is done, check if any error occured
-//        if (queryJob.getStatus().getError() != null) {
-//            throw new Exception(queryJob.getStatus().getError().toString());
-//        }
-//
-//        // Step 4: Display results
-//        // Here, we will print the total number of rows that were inserted
-//        JobStatistics.QueryStatistics stats = queryJob.getStatistics();
-//        Long rowsInserted = stats.getDmlStats().getInsertedRowCount();
-//        System.out.printf("%d rows inserted\n", rowsInserted);
     }
 
 }
+
+
