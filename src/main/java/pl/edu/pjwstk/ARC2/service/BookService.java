@@ -203,7 +203,7 @@ public class BookService implements BookRepository {
     }
 
     @Override
-    public Iterable<FieldValueList> queryTotalRows() {
+    public TableDefinition queryTotalRows() {
         try {
             String query = "SELECT * FROM `sample_dataset.book`";
 
@@ -215,7 +215,8 @@ public class BookService implements BookRepository {
 
             TableId tableId = TableId.of("arc2-366516", "sample_dataset", "book");
             Table table = bigquery.getTable(tableId);
-            return table.getDefinition();
+            var temp =  table.getDefinition();
+            return temp;
 
         } catch (BigQueryException e) {
             System.out.println("Query not performed \n" + e.toString());
