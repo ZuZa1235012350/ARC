@@ -203,7 +203,7 @@ public class BookService implements BookRepository {
     }
 
     @Override
-    public Iterable<FieldValueList> queryTotalRows() {
+    public TableResult queryTotalRows() {
         try {
             String query = "SELECT TO_JSON_STRING(*) FROM `sample_dataset.book`";
 
@@ -211,7 +211,7 @@ public class BookService implements BookRepository {
 
             TableResult results = bigquery.query(QueryJobConfiguration.of(query));
 
-            return results.getValues();
+            return results;
         } catch (BigQueryException | InterruptedException e) {
             System.out.println("Query not performed \n" + e.toString());
            return null;
