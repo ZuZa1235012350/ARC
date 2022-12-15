@@ -7,7 +7,6 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -205,7 +204,7 @@ public class BookService implements BookRepository {
     }
 
     @Override
-    public JsonArray queryTotalRows() {
+    public Map<String, String> queryTotalRows() {
         try {
             String query = "SELECT * FROM `sample_dataset.book`";
 
@@ -215,15 +214,15 @@ public class BookService implements BookRepository {
 //            return results.getValues();
             JsonArray jsonArray = new JsonArray();
             Dataset dataset = bigquery.getDataset("sample_dataset");
-            dataset
-                    .getLabels()
-                    .forEach((key, value) -> {
-                        JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty(key,value);
-                        jsonArray.add(jsonObject);
-                    });
+            var lab = dataset
+                    .getLabels();
+//                    .forEach((key, value) -> {
+//                        JsonObject jsonObject = new JsonObject();
+//                        jsonObject.addProperty(key,value);
+//                        jsonArray.add(jsonObject);
+//                    });
 
-            return jsonArray;
+            return lab;
 
 
 
