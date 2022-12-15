@@ -210,7 +210,7 @@ public class BookService implements BookRepository {
             final BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
             // Step 2: Prepare query job
             final String DELETE_BOOK =
-                    "DELETE FROM `sample-project-330313.sample_dataset.vegetables` WHERE title="+title;
+                    "DELETE FROM `arc2-366516.sample_dataset.book` WHERE title="+title;
             QueryJobConfiguration queryConfig =
                     QueryJobConfiguration.newBuilder(DELETE_BOOK).build();
 
