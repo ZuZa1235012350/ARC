@@ -1,7 +1,7 @@
 package pl.edu.pjwstk.ARC2.controllers;
 
-import com.google.cloud.bigquery.FieldValueList;
 import com.google.cloud.datastore.Key;
+import com.google.gson.JsonArray;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +73,7 @@ public class BookController {
     }
 
     @GetMapping("/getBooksFromBigQueryTable")
-    public Iterable<FieldValueList> getDataFromBQ()  {
+    public JsonArray getDataFromBQ()  {
         return service.queryTotalRows();
     }
 
