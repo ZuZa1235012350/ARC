@@ -205,7 +205,7 @@ public class BookService implements BookRepository {
     @Override
     public Iterable<FieldValueList> queryTotalRows() {
         try {
-            String query = "SELECT * FROM `sample_dataset.book`";
+            String query = "SELECT TO_JSON_STRING(*) FROM `sample_dataset.book`";
 
             BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
 
