@@ -212,10 +212,10 @@ public class BookService implements BookRepository {
 
             TableResult results = bigquery.query(QueryJobConfiguration.of(query));
 //            return results.getValues();
-            JsonArray temp = new JsonArray();
+            var temp = new JsonArray();
             results
                     .iterateAll()
-                    .forEach(row -> row.forEach(val -> temp.add(String.valueOf(row))));
+                    .forEach(row -> row.forEach(val -> temp.add(String.valueOf(val.getRecordValue()))));
             return temp;
 
 
