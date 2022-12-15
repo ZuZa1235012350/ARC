@@ -208,11 +208,16 @@ public class BookService implements BookRepository {
             String query = "SELECT * FROM `sample_dataset.book`";
 
             BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+//
+//            TableResult results = bigquery.query(QueryJobConfiguration.of(query));
+//
+//            return  results.getValues();
 
-            TableResult results = bigquery.query(QueryJobConfiguration.of(query));
+            TableId tableId = TableId.of("arc2-366516", "sample_dataset", "book");
+            Table table = bigquery.getTable(tableId);
+            return table.getDefinition();
 
-            return  results.getValues();
-        } catch (BigQueryException | InterruptedException e) {
+        } catch (BigQueryException e) {
             System.out.println("Query not performed \n" + e.toString());
            return null;
         }
