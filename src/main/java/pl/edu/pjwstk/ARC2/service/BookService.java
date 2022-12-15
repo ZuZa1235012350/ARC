@@ -6,8 +6,6 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,7 @@ import pl.edu.pjwstk.ARC2.entities.Book;
 import pl.edu.pjwstk.ARC2.repo.BookRepository;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
@@ -44,6 +43,8 @@ public class BookService implements BookRepository {
                         counter)
                 .build();
         datastore.put(bookEntity);
+
+        saveChangesFromDS("addBook");
         return key;
     }
 
@@ -120,6 +121,7 @@ public class BookService implements BookRepository {
             }
             tx.update(book);
             tx.commit();
+            saveChangesFromDS("updateBookCounter");
             returnedMessage = String.format("counter is %s now is %s", Objects.requireNonNull(book).getLong("counter"),
                     Objects.requireNonNull(book).getLong("counter") - 1L);
 
@@ -163,6 +165,7 @@ public class BookService implements BookRepository {
         datastore.put(notification);
         return "task scheduled";
     }
+
     @Override
     public void downloadDataFromGCS(){
         Storage storage = StorageOptions.getDefaultInstance().getService();
@@ -190,6 +193,31 @@ public class BookService implements BookRepository {
             InsertAllResponse response =
                     bigquery.insertAll(
                             InsertAllRequest.newBuilder(TableId.of("sample_dataset", "book"))
+                                    .addRow(newBook)
+                                    .build());
+
+            if (response.hasErrors()) {
+                for (Map.Entry<Long, List<BigQueryError>> entry : response.getInsertErrors().entrySet()) {
+                    System.out.println("Response error: \n" + entry.getValue());
+                }
+            }
+            System.out.println("Rows successfully inserted into table without row ids");
+        } catch (BigQueryException e) {
+            System.out.println("Insert operation not performed \n" + e.toString());
+        }
+    }
+
+    public void saveChangesFromDS(String changeName) {
+        try {
+            final BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+            Map<String, Object> newBook = new HashMap<>();
+            newBook.put("name", changeName);
+            SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+            newBook.put("time",formatter.format(date));
+            InsertAllResponse response =
+                    bigquery.insertAll(
+                            InsertAllRequest.newBuilder(TableId.of("sample_dataset", "change"))
                                     .addRow(newBook)
                                     .build());
 
