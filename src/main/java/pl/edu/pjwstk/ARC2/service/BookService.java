@@ -211,7 +211,7 @@ public class BookService implements BookRepository {
 
             TableResult results = bigquery.query(QueryJobConfiguration.of(query));
 
-            return results.iterateAll();
+            return  results.getValues();
         } catch (BigQueryException | InterruptedException e) {
             System.out.println("Query not performed \n" + e.toString());
            return null;
