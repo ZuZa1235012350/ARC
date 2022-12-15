@@ -1,6 +1,7 @@
 package pl.edu.pjwstk.ARC2.controllers;
 
 import com.google.cloud.datastore.Key;
+import com.google.gson.JsonArray;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,6 @@ import pl.edu.pjwstk.ARC2.zad6.GCSUpload;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -72,7 +72,7 @@ public class BookController {
     }
 
     @GetMapping("/getBooksFromBigQueryTable")
-    public Map<String, String> getDataFromBQ()  {
+    public JsonArray getDataFromBQ()  {
         return service.queryTotalRows();
     }
 

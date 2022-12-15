@@ -204,29 +204,24 @@ public class BookService implements BookRepository {
     }
 
     @Override
-    public Map<String, String> queryTotalRows() {
+    public JsonArray queryTotalRows() {
         try {
             String query = "SELECT * FROM `sample_dataset.book`";
 
             BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
 
-//            TableResult results = bigquery.query(QueryJobConfiguration.of(query));
+            TableResult results = bigquery.query(QueryJobConfiguration.of(query));
 //            return results.getValues();
-            JsonArray jsonArray = new JsonArray();
-            Dataset dataset = bigquery.getDataset("sample_dataset");
-            var lab = dataset
-                    .getLabels();
-//                    .forEach((key, value) -> {
-//                        JsonObject jsonObject = new JsonObject();
-//                        jsonObject.addProperty(key,value);
-//                        jsonArray.add(jsonObject);
-//                    });
-
-            return lab;
+            JsonArray temp = new JsonArray();
+            results
+                    .iterateAll()
+                    .forEach(row -> row.forEach(val -> temp.add(String.valueOf(row))));
+            return temp;
 
 
 
-        } catch (BigQueryException e) {
+
+        } catch (BigQueryException | InterruptedException e) {
             System.out.println("Query not performed \n" + e.toString());
            return null;
         }
