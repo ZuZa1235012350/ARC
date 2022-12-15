@@ -7,6 +7,7 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -212,11 +213,25 @@ public class BookService implements BookRepository {
 
             TableResult results = bigquery.query(QueryJobConfiguration.of(query));
 //            return results.getValues();
-            var temp = new JsonArray();
-            results
-                    .iterateAll()
-                    .forEach(row -> row.forEach(val -> temp.add(String.valueOf(val.getRecordValue()))));
-            return temp;
+//            results
+//                    .iterateAll()
+//                    .forEach(row -> row.forEach(val -> String.valueOf(val.getRecordValue())));
+
+            JsonArray jsonArray = new JsonArray();
+            JsonObject jsonObject = new JsonObject();
+            for (FieldValueList row : results.iterateAll()) {
+                // We can use the `get` method along with the column
+                // name to get the corresponding row entry
+                jsonObject.addProperty("title",row.get("title").getStringValue());
+                jsonObject.addProperty("author",row.get("author").getStringValue());
+                jsonObject.addProperty("counter",row.get("counter").getNumericValue().longValue());
+                jsonObject.addProperty("book_section",row.get("book_section").getStringValue());
+
+                jsonArray.add(jsonObject);
+            }
+
+            return jsonArray;
+
 
 
 
