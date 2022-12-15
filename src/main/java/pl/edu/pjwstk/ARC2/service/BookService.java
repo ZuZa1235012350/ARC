@@ -205,7 +205,7 @@ public class BookService implements BookRepository {
     }
 
     @Override
-    public void deleteBookByTitleBQ(String title) {
+    public void deleteBookByTitleBQ(String title) throws Exception {
         try {
             final BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
             // Step 2: Prepare query job
@@ -216,8 +216,14 @@ public class BookService implements BookRepository {
 
 
             // Step 3: Run the job on BigQuery
-            Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).build());
-            queryJob = queryJob.waitFor();
+            Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).build()).waitFor();
+            if (queryJob == null) {
+                throw new Exception("job no longer exists");
+            }
+            // once the job is done, check if any error occured
+            if (queryJob.getStatus().getError() != null) {
+                throw new Exception(queryJob.getStatus().getError().toString());
+            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();

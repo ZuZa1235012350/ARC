@@ -71,7 +71,7 @@ public class BookController {
         service.addBookToBigQueryTable(book.getTitle(),book.getAuthor(),book.getCounter(),book.getBook_section());
     }
     @DeleteMapping("/deleteBookByTitle/{title}")
-    public void setBookDataToBQ(@PathVariable("title") String title)  {
+    public void setBookDataToBQ(@PathVariable("title") String title)  throws Exception  {
         service.deleteBookByTitleBQ(title);
     }
 
