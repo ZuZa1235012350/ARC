@@ -1,7 +1,6 @@
 package pl.edu.pjwstk.ARC2.controllers;
 
 import com.google.cloud.datastore.Key;
-import com.google.gson.JsonArray;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -70,16 +69,5 @@ public class BookController {
     public void setBookDataToBQ(@RequestBody Book book)  {
         service.addBookToBigQueryTable(book.getTitle(),book.getAuthor(),book.getCounter(),book.getBook_section());
     }
-    @DeleteMapping("/deleteBookByTitle/{title}")
-    public void setBookDataToBQ(@PathVariable("title") String title)  throws Exception  {
-        service.deleteBookByTitleBQ(title);
-    }
-
-    @GetMapping("/getBooksFromBigQueryTable")
-    public JsonArray getDataFromBQ()  {
-        return service.queryTotalRows();
-    }
-
-
 
 }
