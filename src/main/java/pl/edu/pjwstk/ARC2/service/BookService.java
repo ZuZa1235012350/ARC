@@ -210,16 +210,17 @@ public class BookService implements BookRepository {
     public void saveChangesFromDS(String changeName) {
         try {
             final BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
-            Map<String, Object> newBook = new HashMap<>();
-            newBook.put("name", changeName);
+            Map<String, Object> newChange = new HashMap<>();
+            newChange.put("name", changeName);
             SimpleDateFormat formatter=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             Date date = new Date();
-            newBook.put("time",formatter.format(date));
+            newChange.put("time",formatter.format(date));
             InsertAllResponse response =
                     bigquery.insertAll(
                             InsertAllRequest.newBuilder(TableId.of("sample_dataset", "change"))
-                                    .addRow(newBook)
+                                    .addRow(newChange)
                                     .build());
+
 
             if (response.hasErrors()) {
                 for (Map.Entry<Long, List<BigQueryError>> entry : response.getInsertErrors().entrySet()) {
