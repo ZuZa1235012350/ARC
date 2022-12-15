@@ -205,6 +205,26 @@ public class BookService implements BookRepository {
     }
 
     @Override
+    public void deleteBookByTitleBQ(String title) {
+        try {
+            final BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+            // Step 2: Prepare query job
+            final String DELETE_BOOK =
+                    "DELETE FROM `sample-project-330313.sample_dataset.vegetables` WHERE title="+title;
+            QueryJobConfiguration queryConfig =
+                    QueryJobConfiguration.newBuilder(DELETE_BOOK).build();
+
+
+            // Step 3: Run the job on BigQuery
+            Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).build());
+            queryJob = queryJob.waitFor();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public JsonArray queryTotalRows() {
         try {
             String query = "SELECT * FROM `sample_dataset.book`";

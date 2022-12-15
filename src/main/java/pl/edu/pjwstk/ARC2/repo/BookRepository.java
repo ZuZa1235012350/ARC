@@ -18,4 +18,5 @@ public interface BookRepository {
     void downloadDataFromGCS();
     void addBookToBigQueryTable(String title, String author, Long counter, String sectionName);
     JsonArray queryTotalRows();
+    void deleteBookByTitleBQ(String title);
 }

@@ -70,6 +70,10 @@ public class BookController {
     public void setBookDataToBQ(@RequestBody Book book)  {
         service.addBookToBigQueryTable(book.getTitle(),book.getAuthor(),book.getCounter(),book.getBook_section());
     }
+    @DeleteMapping("/deleteBookByTitle/{title}")
+    public void setBookDataToBQ(@PathVariable("title") String title)  {
+        service.deleteBookByTitleBQ(title);
+    }
 
     @GetMapping("/getBooksFromBigQueryTable")
     public JsonArray getDataFromBQ()  {
