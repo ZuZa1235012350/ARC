@@ -45,7 +45,7 @@ public class BookService implements BookRepository {
         datastore.put(bookEntity);
 
         saveChangesFromDS("addBook");
-        addBookToBigQueryTable(title,author,counter,sectionName);
+        this.addBookToBigQueryTable(title,author,counter,sectionName);
         return key;
     }
 
